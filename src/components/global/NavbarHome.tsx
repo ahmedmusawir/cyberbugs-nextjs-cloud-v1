@@ -81,7 +81,7 @@ const NavbarHome = () => {
         />
       </Link>
       <Link href={"/"}>
-        <h5 className="mt-2 ml-1 hidden md:block text-white">Public Home</h5>
+        <h5 className="mt-2 ml-1 hidden md:block text-white">CyberBugs</h5>
       </Link>
 
       {/* NAVIGATION */}

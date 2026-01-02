@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>BugTracker Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#135bec",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101622",
+                        "surface-dark": "#1e293b",
+                        "surface-highlight": "#282e39",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        /* Custom scrollbar for dark mode */
+        .dark ::-webkit-scrollbar { width: 8px; height: 8px; }
+        .dark ::-webkit-scrollbar-track { background: #101622; }
+        .dark ::-webkit-scrollbar-thumb { background: #282e39; border-radius: 4px; }
+        .dark ::-webkit-scrollbar-thumb:hover { background: #374151; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white font-display overflow-hidden">
+<div class="flex h-screen w-full">
+<!-- Sidebar -->
+<aside class="hidden md:flex w-72 flex-col justify-between border-r border-slate-800 bg-background-light dark:bg-background-dark p-4">
+<div class="flex flex-col gap-4">
+<!-- Brand -->
+<div class="flex gap-3 px-2 py-2 items-center">
+<div class="bg-primary/20 flex items-center justify-center rounded-lg size-10 text-primary">
+<span class="material-symbols-outlined text-3xl">bug_report</span>
+</div>
+<div class="flex flex-col">
+<h1 class="text-base font-bold leading-none dark:text-white">BugTracker</h1>
+<p class="text-slate-500 dark:text-[#9da6b9] text-xs font-medium mt-1">v2.4.0 (Enterprise)</p>
+</div>
+</div>
+<!-- Navigation -->
+<nav class="flex flex-col gap-2 mt-4">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/10 text-primary" href="#">
+<span class="material-symbols-outlined fill-1">dashboard</span>
+<p class="text-sm font-bold">Dashboard</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-500 dark:text-[#9da6b9] hover:bg-slate-100 dark:hover:bg-surface-highlight transition-colors" href="#">
+<span class="material-symbols-outlined">folder</span>
+<p class="text-sm font-medium">Projects</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-500 dark:text-[#9da6b9] hover:bg-slate-100 dark:hover:bg-surface-highlight transition-colors" href="#">
+<span class="material-symbols-outlined">bug_report</span>
+<p class="text-sm font-medium">Issues</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-500 dark:text-[#9da6b9] hover:bg-slate-100 dark:hover:bg-surface-highlight transition-colors" href="#">
+<span class="material-symbols-outlined">group</span>
+<p class="text-sm font-medium">Team</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-500 dark:text-[#9da6b9] hover:bg-slate-100 dark:hover:bg-surface-highlight transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<p class="text-sm font-medium">Settings</p>
+</a>
+</nav>
+</div>
+<!-- User Profile & Logout -->
+<div class="flex flex-col gap-4">
+<div class="flex items-center gap-3 px-3 py-2 rounded-lg bg-slate-100 dark:bg-surface-highlight">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border-2 border-slate-700" data-alt="User avatar portrait" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuB825vqWROz7qK5skOMCKkUiTWCtUrjIISGW2rFiyePM9tPEd7Ug4Z2_-kAwdrh3rfTmeOTVSvmfaj11UwItyjhl4z2DrUFUGKxa8n90wZuuEOOCOYW0qG8LGJYt34BRzSrk1IMGa9Xrn5cdJRzoR7O-mrNsiz2bvcS5Qrp9zpPNlFIBEI0pIBpNnXAzDwzfT9c2VWEfZmnpBHHNTcllmy_j4bIs0-dFfK-cZ1vUMAoTDgRFGlmeLku4_7Ms8CmfBfB-zCOUoIWbxw");'></div>
+<div class="flex flex-col min-w-0">
+<p class="text-sm font-bold dark:text-white truncate">Alex Morgan</p>
+<p class="text-xs text-slate-500 dark:text-[#9da6b9]">Lead QA Tester</p>
+</div>
+</div>
+<button class="flex w-full cursor-pointer items-center justify-center rounded-lg h-10 px-4 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-sm font-bold transition-colors">
+<span class="truncate">Log Out</span>
+</button>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col h-full overflow-hidden relative">
+<!-- Top Header Area -->
+<header class="w-full flex flex-col gap-6 p-6 pb-2 md:p-8 md:pb-4 flex-shrink-0">
+<!-- Welcome & Controls Row -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+<div class="flex flex-col gap-1">
+<h2 class="text-3xl md:text-4xl font-black tracking-tight dark:text-white">Overview</h2>
+<p class="text-slate-500 dark:text-[#9da6b9]">Welcome back, here's what's happening today.</p>
+</div>
+<div class="flex items-center gap-3 w-full md:w-auto">
+<!-- Admin Action -->
+<button class="flex-1 md:flex-none flex items-center justify-center gap-2 h-12 px-5 rounded-lg bg-slate-200 dark:bg-surface-highlight text-slate-900 dark:text-white font-bold hover:brightness-110 transition-all">
+<span class="material-symbols-outlined">settings_applications</span>
+<span class="truncate">Manage Apps</span>
+</button>
+<!-- Tester Action -->
+<button class="flex-1 md:flex-none flex items-center justify-center gap-2 h-12 px-5 rounded-lg bg-primary text-white font-bold hover:bg-blue-600 transition-all shadow-lg shadow-blue-500/20">
+<span class="material-symbols-outlined">add</span>
+<span class="truncate">Report Bug</span>
+</button>
+</div>
+</div>
+<!-- Search Bar Row -->
+<div class="w-full max-w-2xl">
+<label class="flex w-full items-center h-12 rounded-lg bg-white dark:bg-surface-highlight border border-slate-200 dark:border-none shadow-sm focus-within:ring-2 focus-within:ring-primary overflow-hidden transition-all">
+<div class="pl-4 pr-2 text-slate-400">
+<span class="material-symbols-outlined">search</span>
+</div>
+<input class="w-full bg-transparent border-none text-base text-slate-900 dark:text-white placeholder:text-slate-400 focus:ring-0 h-full" placeholder="Search applications, error codes, or bug IDs..."/>
+</label>
+</div>
+</header>
+<!-- Scrollable Dashboard Content -->
+<div class="flex-1 overflow-y-auto p-6 pt-2 md:p-8 md:pt-4">
+<!-- Quick Stats -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+<div class="bg-white dark:bg-surface-highlight p-5 rounded-xl border border-slate-200 dark:border-none shadow-sm flex flex-col gap-2">
+<div class="flex justify-between items-start">
+<p class="text-slate-500 dark:text-[#9da6b9] text-sm font-medium">Total Applications</p>
+<span class="material-symbols-outlined text-slate-400">apps</span>
+</div>
+<p class="text-3xl font-bold dark:text-white">12</p>
+<div class="flex items-center gap-1 text-emerald-500 text-xs font-medium">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+<span>2 New this month</span>
+</div>
+</div>
+<div class="bg-white dark:bg-surface-highlight p-5 rounded-xl border border-slate-200 dark:border-none shadow-sm flex flex-col gap-2">
+<div class="flex justify-between items-start">
+<p class="text-slate-500 dark:text-[#9da6b9] text-sm font-medium">Open Issues</p>
+<span class="material-symbols-outlined text-slate-400">bug_report</span>
+</div>
+<p class="text-3xl font-bold dark:text-white">48</p>
+<div class="flex items-center gap-1 text-red-400 text-xs font-medium">
+<span class="material-symbols-outlined text-sm">arrow_upward</span>
+<span>+5% from last week</span>
+</div>
+</div>
+<div class="bg-white dark:bg-surface-highlight p-5 rounded-xl border border-slate-200 dark:border-none shadow-sm flex flex-col gap-2">
+<div class="flex justify-between items-start">
+<p class="text-slate-500 dark:text-[#9da6b9] text-sm font-medium">Critical Bugs</p>
+<span class="material-symbols-outlined text-red-500">warning</span>
+</div>
+<p class="text-3xl font-bold text-red-500">7</p>
+<div class="text-slate-400 text-xs font-medium">
+                        Needs immediate attention
+                    </div>
+</div>
+<div class="bg-white dark:bg-surface-highlight p-5 rounded-xl border border-slate-200 dark:border-none shadow-sm flex flex-col gap-2">
+<div class="flex justify-between items-start">
+<p class="text-slate-500 dark:text-[#9da6b9] text-sm font-medium">Resolved (WTD)</p>
+<span class="material-symbols-outlined text-emerald-500">check_circle</span>
+</div>
+<p class="text-3xl font-bold text-emerald-500">24</p>
+<div class="flex items-center gap-1 text-emerald-500 text-xs font-medium">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+<span>Great progress!</span>
+</div>
+</div>
+</div>
+<!-- Applications Grid Header -->
+<div class="flex justify-between items-end mb-4">
+<h3 class="text-xl font-bold dark:text-white">Monitored Applications</h3>
+<button class="text-primary text-sm font-semibold hover:underline">View All</button>
+</div>
+<!-- Applications Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+<!-- Card 1 -->
+<div class="group bg-white dark:bg-surface-highlight rounded-xl p-5 border border-slate-200 dark:border-slate-800 hover:border-primary/50 dark:hover:border-primary transition-all shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-3">
+<div class="size-12 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white shadow-lg">
+<span class="material-symbols-outlined">shopping_cart</span>
+</div>
+<div>
+<h4 class="text-lg font-bold dark:text-white leading-tight">E-Commerce Web</h4>
+<p class="text-xs text-slate-500 dark:text-[#9da6b9]">v3.1.2 • Production</p>
+</div>
+</div>
+<span class="px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-500 text-xs font-bold border border-emerald-500/20">Active</span>
+</div>
+<div class="flex justify-between items-center mb-2">
+<span class="text-sm text-slate-500 dark:text-[#9da6b9]">Bug Health</span>
+<span class="text-sm font-bold dark:text-white">12 Open</span>
+</div>
+<div class="w-full bg-slate-100 dark:bg-slate-700 rounded-full h-2 mb-4 overflow-hidden">
+<div class="bg-primary h-2 rounded-full" style="width: 35%"></div>
+</div>
+<div class="flex gap-4 pt-4 border-t border-slate-100 dark:border-slate-700/50">
+<div class="flex flex-col">
+<span class="text-xs text-slate-400">Critical</span>
+<span class="text-lg font-bold text-red-500">2</span>
+</div>
+<div class="flex flex-col">
+<span class="text-xs text-slate-400">High</span>
+<span class="text-lg font-bold text-orange-400">4</span>
+</div>
+<div class="flex flex-col">
+<span class="text-xs text-slate-400">Low</span>
+<span class="text-lg font-bold text-slate-500 dark:text-slate-300">6</span>
+</div>
+<div class="ml-auto flex items-end">
+<button class="text-sm font-bold text-primary opacity-0 group-hover:opacity-100 transition-opacity">Details →</button>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="group bg-white dark:bg-surface-highlight rounded-xl p-5 border border-slate-200 dark:border-slate-800 hover:border-primary/50 dark:hover:border-primary transition-all shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-3">
+<div class="size-12 rounded-lg bg-gradient-to-br from-blue-400 to-cyan-500 flex items-center justify-center text-white shadow-lg">
+<span class="material-symbols-outlined">smartphone</span>
+</div>
+<div>
+<h4 class="text-lg font-bold dark:text-white leading-tight">Consumer iOS App</h4>
+<p class="text-xs text-slate-500 dark:text-[#9da6b9]">v5.0.0 • Beta</p>
+</div>
+</div>
+<span class="px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-500 text-xs font-bold border border-amber-500/20">Beta</span>
+</div>
+<div class="flex justify-between items-center mb-2">
+<span class="text-sm text-slate-500 dark:text-[#9da6b9]">Bug Health</span>
+<span class="text-sm font-bold dark:text-white">28 Open</span>
+</div>
+<div class="w-full bg-slate-100 dark:bg-slate-700 rounded-full h-2 mb-4 overflow-hidden">
+<div class="bg-red-500 h-2 rounded-full" style="width: 65%"></div>
+</div>
+<div class="flex gap-4 pt-4 border-t border-slate-100 dark:border-slate-700/50">
+<div class="flex flex-col">
+<span class="text-xs text-slate-400">Critical</span>
+<span class="text-lg font-bold text-red-500">5</span>
+</div>
+<div class="flex flex-col">
+<span class="text-xs text-slate-400">High</span>
+<span class="text-lg font-bold text-orange-400">10</span>
+</div>
+<div class="flex flex-col">
+<span class="text-xs text-slate-400">Low</span>
+<span class="text-lg font-bold text-slate-500 dark:text-slate-300">13</span>
+</div>
+<div class="ml-auto flex items-end">
+<button class="text-sm font-bold text-primary opacity-0 group-hover:opacity-100 transition-opacity">Details →</button>
+</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="group bg-white dark:bg-surface-highlight rounded-xl p-5 border border-slate-200 dark:border-slate-800 hover:border-primary/50 dark:hover:border-primary transition-all shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-3">
+<div class="size-12 rounded-lg bg-gradient-to-br from-slate-600 to-slate-800 flex items-center justify-center text-white shadow-lg">
+<span class="material-symbols-outlined">admin_panel_settings</span>
+</div>
+<div>
+<h4 class="text-lg font-bold dark:text-white leading-tight">Admin Dashboard</h4>
+<p class="text-xs text-slate-500 dark:text-[#9da6b9]">v1.0.4 • Internal</p>
+</div>
+</div>
+<span class="px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-500 text-xs font-bold border border-emerald-500/20">Stable</span>
+</div>
+<div class="flex justify-between items-center mb-2">
+<span class="text-sm text-slate-500 dark:text-[#9da6b9]">Bug Health</span>
+<span class="text-sm font-bold dark:text-white">3 Open</span>
+</div>
+<div class="w-full bg-slate-100 dark:bg-slate-700 rounded-full h-2 mb-4 overflow-hidden">
+<div class="bg-emerald-500 h-2 rounded-full" style="width: 10%"></div>
+</div>
+<div class="flex gap-4 pt-4 border-t border-slate-100 dark:border-slate-700/50">
+<div class="flex flex-col">
+<span class="text-xs text-slate-400">Critical</span>
+<span class="text-lg font-bold text-slate-500 dark:text-slate-400">0</span>
+</div>
+<div class="flex flex-col">
+<span class="text-xs text-slate-400">High</span>
+<span class="text-lg font-bold text-slate-500 dark:text-slate-400">1</span>
+</div>
+<div class="flex flex-col">
+<span class="text-xs text-slate-400">Low</span>
+<span class="text-lg font-bold text-slate-500 dark:text-slate-300">2</span>
+</div>
+<div class="ml-auto flex items-end">
+<button class="text-sm font-bold text-primary opacity-0 group-hover:opacity-100 transition-opacity">Details →</button>
+</div>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="group bg-white dark:bg-surface-highlight rounded-xl p-5 border border-slate-200 dark:border-slate-800 hover:border-primary/50 dark:hover:border-primary transition-all shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-3">
+<div class="size-12 rounded-lg bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center text-white shadow-lg">
+<span class="material-symbols-outlined">payments</span>
+</div>
+<div>
+<h4 class="text-lg font-bold dark:text-white leading-tight">Payment Gateway</h4>
+<p class="text-xs text-slate-500 dark:text-[#9da6b9]">v2.1.0 • Service</p>
+</div>
+</div>
+<span class="px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-500 text-xs font-bold border border-emerald-500/20">Active</span>
+</div>
+<div class="flex justify-between items-center mb-2">
+<span class="text-sm text-slate-500 dark:text-[#9da6b9]">Bug Health</span>
+<span class="text-sm font-bold dark:text-white">5 Open</span>
+</div>
+<div class="w-full bg-slate-100 dark:bg-slate-700 rounded-full h-2 mb-4 overflow-hidden">
+<div class="bg-orange-400 h-2 rounded-full" style="width: 20%"></div>
+</div>
+<div class="flex gap-4 pt-4 border-t border-slate-100 dark:border-slate-700/50">
+<div class="flex flex-col">
+<span class="text-xs text-slate-400">Critical</span>
+<span class="text-lg font-bold text-slate-500 dark:text-slate-400">0</span>
+</div>
+<div class="flex flex-col">
+<span class="text-xs text-slate-400">High</span>
+<span class="text-lg font-bold text-orange-400">2</span>
+</div>
+<div class="flex flex-col">
+<span class="text-xs text-slate-400">Low</span>
+<span class="text-lg font-bold text-slate-500 dark:text-slate-300">3</span>
+</div>
+<div class="ml-auto flex items-end">
+<button class="text-sm font-bold text-primary opacity-0 group-hover:opacity-100 transition-opacity">Details →</button>
+</div>
+</div>
+</div>
+<!-- Add New App Card -->
+<button class="group flex flex-col items-center justify-center gap-4 bg-transparent border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-xl p-5 hover:border-primary hover:bg-primary/5 transition-all min-h-[220px]">
+<div class="size-16 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+<span class="material-symbols-outlined text-3xl text-slate-400 group-hover:text-primary">add</span>
+</div>
+<div class="text-center">
+<h4 class="text-lg font-bold text-slate-500 dark:text-slate-400 group-hover:text-primary">Add New Application</h4>
+<p class="text-sm text-slate-400 dark:text-slate-500 mt-1">Admin Only</p>
+</div>
+</button>
+</div>
+<!-- Activity Footer Section -->
+<div class="mt-8 pt-8 border-t border-slate-200 dark:border-slate-800">
+<h3 class="text-lg font-bold dark:text-white mb-4">Recent Activity</h3>
+<div class="flex flex-col gap-3">
+<div class="flex items-center gap-4 p-3 hover:bg-slate-50 dark:hover:bg-surface-highlight rounded-lg transition-colors">
+<div class="bg-primary/10 p-2 rounded-full text-primary">
+<span class="material-symbols-outlined text-sm">add_circle</span>
+</div>
+<div class="flex flex-col md:flex-row md:items-center gap-1 md:gap-2 text-sm">
+<span class="font-bold dark:text-white">Sarah Jenkins</span>
+<span class="text-slate-500 dark:text-[#9da6b9]">reported a new critical bug in</span>
+<span class="font-bold text-primary">Consumer iOS App</span>
+</div>
+<span class="ml-auto text-xs text-slate-400">2h ago</span>
+</div>
+<div class="flex items-center gap-4 p-3 hover:bg-slate-50 dark:hover:bg-surface-highlight rounded-lg transition-colors">
+<div class="bg-emerald-500/10 p-2 rounded-full text-emerald-500">
+<span class="material-symbols-outlined text-sm">check</span>
+</div>
+<div class="flex flex-col md:flex-row md:items-center gap-1 md:gap-2 text-sm">
+<span class="font-bold dark:text-white">Mike Ross</span>
+<span class="text-slate-500 dark:text-[#9da6b9]">resolved issue #4022 in</span>
+<span class="font-bold text-primary">E-Commerce Web</span>
+</div>
+<span class="ml-auto text-xs text-slate-400">5h ago</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

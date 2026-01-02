@@ -1,7 +1,7 @@
-import AdminPortalPageContent from "./AdminPortalPageContent";
+import AdminDashboardPageContent from "./AdminDashboardPageContent";
 
-const AdminPortal = () => {
-  return <AdminPortalPageContent />;
+const AdminDashboardPage = () => {
+  return <AdminDashboardPageContent />;
 };
 
-export default AdminPortal;
+export default AdminDashboardPage;

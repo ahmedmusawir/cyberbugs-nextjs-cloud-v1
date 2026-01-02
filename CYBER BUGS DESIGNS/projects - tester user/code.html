@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Projects List - BugTracker</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#135bec",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101622",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display min-h-screen flex flex-col overflow-x-hidden text-slate-900 dark:text-white transition-colors duration-200">
+<!-- Top Navigation -->
+<header class="sticky top-0 z-50 w-full border-b border-gray-200 dark:border-slate-800 bg-white dark:bg-[#161b26]">
+<div class="px-6 lg:px-8 py-3 flex items-center justify-between">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-3 text-primary">
+<div class="size-8 rounded bg-primary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" style="font-size: 24px;">bug_report</span>
+</div>
+<h2 class="text-slate-900 dark:text-white text-lg font-bold tracking-tight">BugTracker</h2>
+</div>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-slate-500 hover:text-primary dark:text-slate-400 dark:hover:text-white text-sm font-medium transition-colors" href="#">Dashboard</a>
+<a class="text-primary text-sm font-medium" href="#">Projects</a>
+<a class="text-slate-500 hover:text-primary dark:text-slate-400 dark:hover:text-white text-sm font-medium transition-colors" href="#">Users</a>
+<a class="text-slate-500 hover:text-primary dark:text-slate-400 dark:hover:text-white text-sm font-medium transition-colors" href="#">Settings</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden sm:flex items-center bg-gray-100 dark:bg-slate-800 rounded-lg px-3 py-1.5 w-64 border border-transparent focus-within:border-primary/50 transition-all">
+<span class="material-symbols-outlined text-slate-400" style="font-size: 20px;">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm w-full text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400" placeholder="Search..." type="text"/>
+</div>
+<button class="relative rounded-full size-9 bg-gray-200 dark:bg-slate-700 flex items-center justify-center hover:bg-gray-300 dark:hover:bg-slate-600 transition-colors">
+<span class="material-symbols-outlined text-slate-600 dark:text-slate-300" style="font-size: 20px;">notifications</span>
+<span class="absolute top-0 right-0 size-2.5 bg-red-500 border-2 border-white dark:border-[#161b26] rounded-full"></span>
+</button>
+<div class="size-9 rounded-full bg-cover bg-center border border-gray-200 dark:border-slate-700" data-alt="User profile avatar of a man smiling" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBgq5Gdqq_mYJe9jfvwsSMPz56JN5Qa8irAJFMCoqRyikW3_9QfjF6FEzcnlaEVyRPIOC7o_wybc-wlD1s4J6Oz7f84FK9H-iaFFxWBeVWCBfvcPxnu4tYjXw8Ny0quMv3z3XCXgAyvTDNSTxUXvEaKaKbUi08FZhz10JoyhRGFTr76_UQSIeMitJhqTMshU8hZ1-wYbs8fc4DSyqUTZaHC79ZWu2UFdo2dzHEZpQE7fHom2z6Mg4c9U5ftwHQfvJh8WvY5eVkt9-g");'>
+</div>
+</div>
+</div>
+</header>
+<main class="flex-1 w-full max-w-[1400px] mx-auto px-6 lg:px-8 py-8">
+<!-- Breadcrumbs -->
+<div class="flex items-center gap-2 mb-6 text-sm">
+<a class="text-slate-500 dark:text-slate-400 hover:text-primary transition-colors" href="#">Dashboard</a>
+<span class="text-slate-400 dark:text-slate-600">/</span>
+<span class="font-medium text-slate-900 dark:text-white">Projects</span>
+</div>
+<!-- Page Heading -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+<div>
+<h1 class="text-3xl font-bold text-slate-900 dark:text-white tracking-tight mb-2">Projects</h1>
+<p class="text-slate-500 dark:text-slate-400 max-w-2xl">Manage your applications, track bug reports, and monitor project health status across your organization.</p>
+</div>
+<button class="flex items-center justify-center gap-2 bg-primary hover:bg-blue-600 text-white px-5 py-2.5 rounded-lg font-medium transition-colors shadow-lg shadow-primary/20 shrink-0">
+<span class="material-symbols-outlined" style="font-size: 20px;">add</span>
+                New Project
+            </button>
+</div>
+<!-- Filters and Controls -->
+<div class="bg-white dark:bg-[#161b26] rounded-xl border border-gray-200 dark:border-slate-800 p-4 mb-6 shadow-sm">
+<div class="flex flex-col lg:flex-row gap-4 justify-between">
+<!-- Search -->
+<div class="flex-1 max-w-md relative">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 material-symbols-outlined" style="font-size: 20px;">search</span>
+<input class="w-full pl-10 pr-4 py-2.5 bg-gray-50 dark:bg-slate-900/50 border border-gray-200 dark:border-slate-700 rounded-lg text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all dark:text-white dark:placeholder-slate-500" placeholder="Search projects by name, ID or owner..." type="text"/>
+</div>
+<!-- Filters -->
+<div class="flex flex-wrap items-center gap-3">
+<div class="flex items-center gap-2 px-3 py-2 bg-gray-50 dark:bg-slate-900/50 border border-gray-200 dark:border-slate-700 rounded-lg cursor-pointer hover:border-primary/50 transition-colors group">
+<span class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Status:</span>
+<span class="text-sm font-medium text-slate-700 dark:text-slate-200">Active</span>
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary" style="font-size: 18px;">expand_more</span>
+</div>
+<div class="flex items-center gap-2 px-3 py-2 bg-gray-50 dark:bg-slate-900/50 border border-gray-200 dark:border-slate-700 rounded-lg cursor-pointer hover:border-primary/50 transition-colors group">
+<span class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Sort:</span>
+<span class="text-sm font-medium text-slate-700 dark:text-slate-200">Newest First</span>
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary" style="font-size: 18px;">sort</span>
+</div>
+<div class="w-px h-6 bg-gray-200 dark:bg-slate-700 mx-1 hidden sm:block"></div>
+<button class="p-2 text-slate-500 hover:text-primary dark:text-slate-400 dark:hover:text-white transition-colors" title="Grid View">
+<span class="material-symbols-outlined" style="font-size: 24px;">grid_view</span>
+</button>
+<button class="p-2 text-primary bg-primary/10 rounded-lg transition-colors" title="List View">
+<span class="material-symbols-outlined" style="font-size: 24px;">view_list</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Projects Table -->
+<div class="bg-white dark:bg-[#161b26] rounded-xl border border-gray-200 dark:border-slate-800 shadow-sm overflow-hidden flex flex-col">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-gray-200 dark:border-slate-800 bg-gray-50/50 dark:bg-slate-900/30">
+<th class="py-4 px-6 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider w-[35%]">Project</th>
+<th class="py-4 px-6 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Status</th>
+<th class="py-4 px-6 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Bugs Reported</th>
+<th class="py-4 px-6 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Team Lead</th>
+<th class="py-4 px-6 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Created</th>
+<th class="py-4 px-6 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-gray-100 dark:divide-slate-800">
+<!-- Row 1 -->
+<tr class="group hover:bg-gray-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="py-4 px-6">
+<div class="flex items-center gap-4">
+<div class="size-10 rounded-lg bg-indigo-500/10 flex items-center justify-center shrink-0 border border-indigo-500/20 text-indigo-500 dark:text-indigo-400">
+<span class="material-symbols-outlined">rocket_launch</span>
+</div>
+<div>
+<h3 class="text-sm font-semibold text-slate-900 dark:text-white group-hover:text-primary transition-colors cursor-pointer">Phoenix Mobile App</h3>
+<p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">v2.4.0 • iOS &amp; Android</p>
+</div>
+</div>
+</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+<span class="size-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                                    Active
+                                </span>
+</td>
+<td class="py-4 px-6">
+<div class="flex items-center gap-3">
+<div class="flex flex-col gap-1 w-24">
+<div class="flex justify-between text-xs">
+<span class="font-medium text-slate-700 dark:text-slate-300">12 Open</span>
+<span class="text-slate-500">45 Total</span>
+</div>
+<div class="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-1.5 overflow-hidden">
+<div class="bg-amber-500 h-full rounded-full" style="width: 26%"></div>
+</div>
+</div>
+</div>
+</td>
+<td class="py-4 px-6">
+<div class="flex items-center gap-2">
+<div class="size-6 rounded-full bg-cover bg-center" data-alt="Portrait of Sarah team lead" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAL__NOJpFyLI9Y30Wd5Xhbs_jIEYzgpl7BhHj2yjyDZUcibwVuoE_GnbCyVcBjuw8ViBlCs6Rx16Df6-6wSYkMTC5PJFoK-GDrlBO8aQVT_rZhic2MhodIwumWKDf0B8PMszZc6AgHfjNYRQ1K-ds3_AC0Eg5tdw3R0yiVdt9ECIEu8C4k8ahycDKNdAiQLGyb7eusNufghIslM8KSB48O8jxmzXdH0pSfzCZXS-tUOemEovkkgCBEUjI5-8sjUPCXL9C6qph6_IY");'></div>
+<span class="text-sm text-slate-700 dark:text-slate-300">Sarah Connor</span>
+</div>
+</td>
+<td class="py-4 px-6">
+<span class="text-sm text-slate-600 dark:text-slate-400">Oct 24, 2023</span>
+</td>
+<td class="py-4 px-6 text-right">
+<div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1.5 text-slate-400 hover:text-primary hover:bg-primary/10 rounded transition-colors" title="View Details">
+<span class="material-symbols-outlined" style="font-size: 20px;">visibility</span>
+</button>
+<button class="p-1.5 text-slate-400 hover:text-amber-500 hover:bg-amber-500/10 rounded transition-colors" title="Edit Settings">
+<span class="material-symbols-outlined" style="font-size: 20px;">edit</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="group hover:bg-gray-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="py-4 px-6">
+<div class="flex items-center gap-4">
+<div class="size-10 rounded-lg bg-pink-500/10 flex items-center justify-center shrink-0 border border-pink-500/20 text-pink-500 dark:text-pink-400">
+<span class="material-symbols-outlined">shopping_cart</span>
+</div>
+<div>
+<h3 class="text-sm font-semibold text-slate-900 dark:text-white group-hover:text-primary transition-colors cursor-pointer">E-Commerce Web</h3>
+<p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Storefront 2.0 • Web React</p>
+</div>
+</div>
+</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
+                                    Maintenance
+                                </span>
+</td>
+<td class="py-4 px-6">
+<div class="flex items-center gap-3">
+<div class="flex flex-col gap-1 w-24">
+<div class="flex justify-between text-xs">
+<span class="font-medium text-slate-700 dark:text-slate-300">3 Open</span>
+<span class="text-slate-500">128 Total</span>
+</div>
+<div class="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-1.5 overflow-hidden">
+<div class="bg-emerald-500 h-full rounded-full" style="width: 2%"></div>
+</div>
+</div>
+</div>
+</td>
+<td class="py-4 px-6">
+<div class="flex items-center gap-2">
+<div class="size-6 rounded-full bg-cover bg-center" data-alt="Portrait of Michael team lead" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC8TbdyjektZoJavgM6hf_5GYRkNITQyIN9o8-oKIrYxaLGJa74rjmGSBXRq4jvObdG-3beDjQiC-LnkpWkVAjvPdrgG-lJh8Kpt_65dVGQYBEYVb8trmNjyO3Qe1qG45gX2Lk1bnO3wal26OnYpE4hgpmoohi5WNwskYVO0B2kqLrL6vz4_BqSBt6-hbtoGU3duiBQ_jspzVp-WRHtlYjHpHLtOACcia4G7wViJT0wZq8YTyJe6R_oCh433SH27-lg41gdgEKZBUQ");'></div>
+<span class="text-sm text-slate-700 dark:text-slate-300">Michael Chen</span>
+</div>
+</td>
+<td class="py-4 px-6">
+<span class="text-sm text-slate-600 dark:text-slate-400">Sep 12, 2023</span>
+</td>
+<td class="py-4 px-6 text-right">
+<div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1.5 text-slate-400 hover:text-primary hover:bg-primary/10 rounded transition-colors" title="View Details">
+<span class="material-symbols-outlined" style="font-size: 20px;">visibility</span>
+</button>
+<button class="p-1.5 text-slate-400 hover:text-amber-500 hover:bg-amber-500/10 rounded transition-colors" title="Edit Settings">
+<span class="material-symbols-outlined" style="font-size: 20px;">edit</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="group hover:bg-gray-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="py-4 px-6">
+<div class="flex items-center gap-4">
+<div class="size-10 rounded-lg bg-blue-500/10 flex items-center justify-center shrink-0 border border-blue-500/20 text-blue-500 dark:text-blue-400">
+<span class="material-symbols-outlined">analytics</span>
+</div>
+<div>
+<h3 class="text-sm font-semibold text-slate-900 dark:text-white group-hover:text-primary transition-colors cursor-pointer">Internal Analytics Dashboard</h3>
+<p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Admin Tools • Data Viz</p>
+</div>
+</div>
+</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+<span class="size-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                                    Active
+                                </span>
+</td>
+<td class="py-4 px-6">
+<div class="flex items-center gap-3">
+<div class="flex flex-col gap-1 w-24">
+<div class="flex justify-between text-xs">
+<span class="font-medium text-slate-700 dark:text-slate-300">24 Open</span>
+<span class="text-slate-500">67 Total</span>
+</div>
+<div class="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-1.5 overflow-hidden">
+<div class="bg-red-500 h-full rounded-full" style="width: 35%"></div>
+</div>
+</div>
+</div>
+</td>
+<td class="py-4 px-6">
+<div class="flex items-center gap-2">
+<div class="size-6 rounded-full bg-cover bg-center" data-alt="Portrait of Alex team lead" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAy2XtkpyH03HQuIu-dNJyqrxptPC4lEv04p4rnlyDBMJuCw34Y7rSW8JMZdUYBeAuEvlry_nFl7lHoGPdT8Qszq-ap5tHpmN5AOeN2fTFEvskMRpGDztoajPaK6L_Ua24ssh9QM_ojrx74N_TkP5Gu__uD1WWylQ0x7bjvbll7kVMT4_b3r7SZgh8l9r3aF5dxCDmh-Yal6iJb-RlKH1Px9OKK6Fma21HREs2gEGGC5Y4VtRyCXStnAnO18xCM9YnHF0hgIVoim98");'></div>
+<span class="text-sm text-slate-700 dark:text-slate-300">Alex Morgan</span>
+</div>
+</td>
+<td class="py-4 px-6">
+<span class="text-sm text-slate-600 dark:text-slate-400">Aug 04, 2023</span>
+</td>
+<td class="py-4 px-6 text-right">
+<div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1.5 text-slate-400 hover:text-primary hover:bg-primary/10 rounded transition-colors" title="View Details">
+<span class="material-symbols-outlined" style="font-size: 20px;">visibility</span>
+</button>
+<button class="p-1.5 text-slate-400 hover:text-amber-500 hover:bg-amber-500/10 rounded transition-colors" title="Edit Settings">
+<span class="material-symbols-outlined" style="font-size: 20px;">edit</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="group hover:bg-gray-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="py-4 px-6">
+<div class="flex items-center gap-4">
+<div class="size-10 rounded-lg bg-purple-500/10 flex items-center justify-center shrink-0 border border-purple-500/20 text-purple-500 dark:text-purple-400">
+<span class="material-symbols-outlined">api</span>
+</div>
+<div>
+<h3 class="text-sm font-semibold text-slate-900 dark:text-white group-hover:text-primary transition-colors cursor-pointer">Payments API Gateway</h3>
+<p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Backend • Microservices</p>
+</div>
+</div>
+</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-gray-500/10 text-gray-600 dark:text-gray-400 border border-gray-500/20">
+                                    Archived
+                                </span>
+</td>
+<td class="py-4 px-6">
+<div class="flex items-center gap-3">
+<div class="flex flex-col gap-1 w-24">
+<div class="flex justify-between text-xs">
+<span class="font-medium text-slate-700 dark:text-slate-300">0 Open</span>
+<span class="text-slate-500">230 Total</span>
+</div>
+<div class="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-1.5 overflow-hidden">
+<div class="bg-gray-400 h-full rounded-full" style="width: 0%"></div>
+</div>
+</div>
+</div>
+</td>
+<td class="py-4 px-6">
+<div class="flex items-center gap-2">
+<div class="size-6 rounded-full bg-cover bg-center" data-alt="Portrait of David team lead" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAQ-4J-DTF9uUqWaKnzqgpKTIy-84pxxuqetWle5ijl5FjAPfsi7_MSqQtNPd5pEfU_AT7KEgI64fMNloNDOp-8Zx4PXinGXR0e-Z57LErr402vv5wxbaMaaTQt8vqqatMzguqZDGFH0hJpXW6y2zgBEepbdC4iqdR1z1ParQYLC9AIm201WyJYBv6v6KpcCmHMwZXx_Y66H4U0UePDsqC8lvQVjTruNOdm1eqQc_MsecVSHYwljgHpMbb1AFKcfJwstWIgsjh2FlQ");'></div>
+<span class="text-sm text-slate-700 dark:text-slate-300">David Kim</span>
+</div>
+</td>
+<td class="py-4 px-6">
+<span class="text-sm text-slate-600 dark:text-slate-400">Jul 15, 2023</span>
+</td>
+<td class="py-4 px-6 text-right">
+<div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1.5 text-slate-400 hover:text-primary hover:bg-primary/10 rounded transition-colors" title="View Details">
+<span class="material-symbols-outlined" style="font-size: 20px;">visibility</span>
+</button>
+<button class="p-1.5 text-slate-400 hover:text-amber-500 hover:bg-amber-500/10 rounded transition-colors" title="Restore">
+<span class="material-symbols-outlined" style="font-size: 20px;">history</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="border-t border-gray-200 dark:border-slate-800 bg-gray-50/50 dark:bg-[#161b26] p-4 flex items-center justify-between">
+<p class="text-sm text-slate-500 dark:text-slate-400">
+                    Showing <span class="font-medium text-slate-900 dark:text-white">1-4</span> of <span class="font-medium text-slate-900 dark:text-white">12</span> projects
+                </p>
+<div class="flex items-center gap-2">
+<button class="px-3 py-1 rounded border border-gray-200 dark:border-slate-700 text-sm text-slate-500 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-slate-800 disabled:opacity-50 transition-colors" disabled="">Previous</button>
+<button class="size-8 rounded bg-primary text-white text-sm font-medium flex items-center justify-center">1</button>
+<button class="size-8 rounded text-slate-600 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-slate-800 text-sm font-medium flex items-center justify-center transition-colors">2</button>
+<button class="size-8 rounded text-slate-600 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-slate-800 text-sm font-medium flex items-center justify-center transition-colors">3</button>
+<button class="px-3 py-1 rounded border border-gray-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors">Next</button>
+</div>
+</div>
+</div>
+</main>
+</body></html>

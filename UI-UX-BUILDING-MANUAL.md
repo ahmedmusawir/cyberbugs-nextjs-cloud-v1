@@ -411,6 +411,12 @@ Navigation sidebars for different user roles. Located in `src/components/layout/
 
 ## Page Building Pattern
 
+> **⚠️ MANDATORY PATTERN — DO NOT SKIP**
+>
+> This is the **most important pattern** in this codebase. Every page MUST follow this structure.
+> Never put page content directly in `page.tsx`. The filename `page.tsx` tells you nothing about what the page does.
+> Always create a descriptive `*PageContent.tsx` file for the actual implementation.
+
 ### The Two-File Pattern
 
 **Every page follows this structure:**
@@ -1382,6 +1388,589 @@ By following these patterns, we can:
   <p>Long form content...</p>
 </Row>
 ```
+
+---
+
+## 10. Advanced Design Patterns
+
+This section covers advanced patterns extracted from production-grade applications built on this starter kit. These patterns enable scalable, maintainable, and consistent UI development.
+
+---
+
+### 10.1 CVA (Class Variance Authority)
+
+CVA enables type-safe component variants with Tailwind CSS. Instead of conditional class logic scattered throughout components, CVA centralizes variant definitions.
+
+#### What is CVA?
+
+```typescript
+// Without CVA: Messy conditional classes
+<button
+  className={`
+    px-4 py-2 rounded-md
+    ${variant === 'primary' ? 'bg-primary text-primary-foreground' : ''}
+    ${variant === 'secondary' ? 'bg-secondary text-secondary-foreground' : ''}
+    ${variant === 'ghost' ? 'bg-transparent hover:bg-accent' : ''}
+    ${size === 'sm' ? 'h-8 text-sm' : ''}
+    ${size === 'md' ? 'h-10 text-base' : ''}
+    ${size === 'lg' ? 'h-12 text-lg' : ''}
+  `}
+>
+  {children}
+</button>
+
+// With CVA: Clean, type-safe variants
+<Button variant="primary" size="md">{children}</Button>
+```
+
+#### Creating Variant Recipes
+
+```typescript
+// src/components/ui/button.tsx
+
+import { cva, type VariantProps } from 'class-variance-authority';
+import { cn } from '@/lib/utils';
+import * as React from 'react';
+
+// Define the variant recipe
+export const buttonVariants = cva(
+  // Base classes (always applied)
+  'inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
+  {
+    variants: {
+      // Intent variants
+      variant: {
+        default: 'bg-primary text-primary-foreground hover:bg-primary/90',
+        destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
+        outline: 'border border-input bg-background hover:bg-accent hover:text-accent-foreground',
+        secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
+        ghost: 'hover:bg-accent hover:text-accent-foreground',
+        link: 'text-primary underline-offset-4 hover:underline',
+      },
+      // Size variants
+      size: {
+        default: 'h-10 px-4 py-2',
+        sm: 'h-9 rounded-md px-3',
+        lg: 'h-11 rounded-md px-8',
+        icon: 'h-10 w-10',
+      },
+    },
+    // Default values
+    defaultVariants: {
+      variant: 'default',
+      size: 'default',
+    },
+  }
+);
+
+// Type-safe props
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+    VariantProps<typeof buttonVariants> {
+  asChild?: boolean;
+}
+
+// Component implementation
+export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ className, variant, size, ...props }, ref) => {
+    return (
+      <button
+        className={cn(buttonVariants({ variant, size, className }))}
+        ref={ref}
+        {...props}
+      />
+    );
+  }
+);
+Button.displayName = 'Button';
+```
+
+#### Type-Safe Props
+
+CVA automatically generates TypeScript types from your variants:
+
+```typescript
+// These are automatically typed!
+<Button variant="primary" />     // ✅ Valid
+<Button variant="secondary" />   // ✅ Valid
+<Button variant="invalid" />     // ❌ TypeScript error
+
+<Button size="sm" />             // ✅ Valid
+<Button size="xl" />             // ❌ TypeScript error
+```
+
+#### CVA Best Practices
+
+| Do ✅ | Don't ❌ |
+|-------|---------|
+| Keep variant sets small (3-5 options) | Create giant variant matrices |
+| Use semantic token classes (`bg-primary`) | Hardcode hex colors |
+| Co-locate recipe with component | Scatter variants across files |
+| Use `cn()` for className merging | Concatenate strings manually |
+
+---
+
+### 10.2 Design Tokens
+
+Design tokens are the single source of truth for visual design decisions. They're defined as CSS variables and mapped to Tailwind classes.
+
+#### CSS Variables in globals.scss
+
+```scss
+// src/app/globals.scss
+
+@layer base {
+  :root {
+    // Background & Foreground
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    // Card
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    // Popover
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    // Primary (brand color)
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+
+    // Secondary
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    // Muted (subtle backgrounds)
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    // Accent (hover states)
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    // Destructive (errors, delete actions)
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    // Border, Input, Ring
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+
+    // Border Radius
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    // ... dark mode overrides
+  }
+}
+```
+
+#### Tailwind Token Mapping
+
+```typescript
+// tailwind.config.ts
+
+export default {
+  theme: {
+    extend: {
+      colors: {
+        background: 'hsl(var(--background))',
+        foreground: 'hsl(var(--foreground))',
+        card: {
+          DEFAULT: 'hsl(var(--card))',
+          foreground: 'hsl(var(--card-foreground))',
+        },
+        primary: {
+          DEFAULT: 'hsl(var(--primary))',
+          foreground: 'hsl(var(--primary-foreground))',
+        },
+        secondary: {
+          DEFAULT: 'hsl(var(--secondary))',
+          foreground: 'hsl(var(--secondary-foreground))',
+        },
+        muted: {
+          DEFAULT: 'hsl(var(--muted))',
+          foreground: 'hsl(var(--muted-foreground))',
+        },
+        accent: {
+          DEFAULT: 'hsl(var(--accent))',
+          foreground: 'hsl(var(--accent-foreground))',
+        },
+        destructive: {
+          DEFAULT: 'hsl(var(--destructive))',
+          foreground: 'hsl(var(--destructive-foreground))',
+        },
+        border: 'hsl(var(--border))',
+        input: 'hsl(var(--input))',
+        ring: 'hsl(var(--ring))',
+      },
+      borderRadius: {
+        lg: 'var(--radius)',
+        md: 'calc(var(--radius) - 2px)',
+        sm: 'calc(var(--radius) - 4px)',
+      },
+    },
+  },
+};
+```
+
+#### Using Tokens in Components
+
+```tsx
+// ✅ CORRECT: Use semantic tokens
+<div className="bg-background text-foreground">
+  <div className="bg-card text-card-foreground rounded-lg border border-border p-4">
+    <h2 className="text-foreground">Title</h2>
+    <p className="text-muted-foreground">Subtitle</p>
+    <Button className="bg-primary text-primary-foreground">Action</Button>
+  </div>
+</div>
+
+// ❌ WRONG: Hardcoded colors
+<div className="bg-white text-gray-900">
+  <div className="bg-gray-50 text-gray-800 rounded-lg border border-gray-200 p-4">
+    <h2 className="text-gray-900">Title</h2>
+    <p className="text-gray-500">Subtitle</p>
+    <Button className="bg-blue-600 text-white">Action</Button>
+  </div>
+</div>
+```
+
+#### Dark Mode with Tokens
+
+Because tokens use CSS variables, dark mode works automatically:
+
+```tsx
+// This component automatically adapts to dark mode
+<div className="bg-background text-foreground">
+  {/* In light mode: white background, dark text */}
+  {/* In dark mode: dark background, light text */}
+</div>
+
+// Toggle dark mode by adding/removing class on html element
+document.documentElement.classList.toggle('dark');
+```
+
+---
+
+### 10.3 Component Catalogue Pattern
+
+Organize components by domain and document their APIs for team consistency.
+
+#### Domain-Based Organization
+
+```
+src/components/
+├── ui/                    # Base primitives (shadcn/ui style)
+│   ├── button.tsx
+│   ├── input.tsx
+│   ├── dialog.tsx
+│   └── ...
+│
+├── global/                # App-wide components
+│   ├── Navbar.tsx
+│   ├── Footer.tsx
+│   └── ...
+│
+├── common/                # Shared utilities
+│   ├── Container.tsx
+│   ├── Spinner.tsx
+│   └── ...
+│
+├── shop/                  # E-commerce domain
+│   ├── ProductList.tsx
+│   ├── ProductCard.tsx
+│   └── product-page/
+│       ├── ProductInfo.tsx
+│       └── ...
+│
+├── cart/                  # Cart domain
+│   ├── CartSlide.tsx
+│   └── CartItem.tsx
+│
+└── checkout/              # Checkout domain
+    ├── left-pane/
+    ├── right-pane/
+    └── payments/
+```
+
+#### Props and APIs Documentation
+
+Document critical component APIs:
+
+```typescript
+// src/components/shop/ProductCard.tsx
+
+/**
+ * ProductCard displays a product in a grid or list view.
+ *
+ * @example
+ * ```tsx
+ * <ProductCard
+ *   product={product}
+ *   variant="compact"
+ *   onAddToCart={(p) => addToCart(p)}
+ * />
+ * ```
+ */
+interface ProductCardProps {
+  /** The product data to display */
+  product: Product;
+  
+  /** Display variant */
+  variant?: 'default' | 'compact' | 'featured';
+  
+  /** Callback when add to cart is clicked */
+  onAddToCart?: (product: Product) => void;
+  
+  /** Additional CSS classes */
+  className?: string;
+}
+
+export const ProductCard = ({
+  product,
+  variant = 'default',
+  onAddToCart,
+  className,
+}: ProductCardProps) => {
+  // Implementation
+};
+```
+
+#### Component Inventory Template
+
+Keep a living inventory of key components:
+
+| Component | Location | Props | Store Integration |
+|-----------|----------|-------|-------------------|
+| `Navbar` | `global/Navbar.tsx` | None | `useCartStore` (item count) |
+| `ProductCard` | `shop/ProductCard.tsx` | `product`, `variant`, `onAddToCart` | None |
+| `CartSlide` | `cart/CartSlide.tsx` | `open`, `onOpenChange` | `useCartStore` |
+| `StripePaymentForm` | `checkout/payments/` | `clientSecret`, `onSuccess` | `useCheckoutStore` |
+
+---
+
+### 10.4 Class Ordering Convention
+
+Consistent class ordering improves readability and reduces merge conflicts.
+
+#### Recommended Order
+
+1. **Layout/Display**: `container`, `flex`, `grid`, `block`, `hidden`
+2. **Position/Overflow**: `relative`, `absolute`, `z-10`, `overflow-hidden`
+3. **Box Model**: `w-`, `h-`, `p-`, `m-`, `gap-`, `space-`
+4. **Typography**: `font-`, `text-`, `leading-`, `tracking-`
+5. **Visuals**: `bg-`, `border-`, `shadow-`, `ring-`
+6. **Effects/Animation**: `transition-`, `duration-`, `animate-`
+7. **State Modifiers**: `hover:`, `focus:`, `disabled:`, `aria-`
+8. **Responsive**: `sm:`, `md:`, `lg:`, `xl:`
+
+#### Example
+
+```tsx
+// ✅ CORRECT: Ordered classes
+<button
+  className="
+    inline-flex items-center justify-center
+    relative
+    w-full sm:w-auto px-4 py-2 gap-2
+    text-sm font-medium
+    bg-primary text-primary-foreground
+    rounded-md border border-border shadow-sm
+    transition-colors
+    hover:bg-primary/90 focus-visible:ring-2
+    disabled:opacity-50 disabled:pointer-events-none
+    md:px-5 md:py-2.5
+  "
+>
+  Continue
+</button>
+
+// ❌ WRONG: Random order
+<button
+  className="
+    hover:bg-primary/90 px-4 text-sm
+    bg-primary inline-flex md:px-5
+    rounded-md w-full transition-colors
+    font-medium py-2 items-center
+    disabled:opacity-50 border-border
+  "
+>
+  Continue
+</button>
+```
+
+---
+
+### 10.5 Dark Mode Best Practices
+
+#### Token-Based Approach (Recommended)
+
+```tsx
+// Automatically adapts to dark mode
+<div className="bg-background text-foreground">
+  <div className="bg-card border-border">
+    Content
+  </div>
+</div>
+```
+
+#### Explicit Dark Variants (When Needed)
+
+```tsx
+// For cases where tokens don't cover your needs
+<div className="bg-white dark:bg-gray-900">
+  <p className="text-gray-600 dark:text-gray-400">
+    This text adapts to dark mode
+  </p>
+</div>
+```
+
+#### Dark Mode Toggle
+
+```typescript
+// src/lib/theme.ts
+
+export const toggleDarkMode = () => {
+  document.documentElement.classList.toggle('dark');
+  
+  // Persist preference
+  const isDark = document.documentElement.classList.contains('dark');
+  localStorage.setItem('theme', isDark ? 'dark' : 'light');
+};
+
+export const initializeTheme = () => {
+  const stored = localStorage.getItem('theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  
+  if (stored === 'dark' || (!stored && prefersDark)) {
+    document.documentElement.classList.add('dark');
+  }
+};
+```
+
+---
+
+### 10.6 Touch Device Considerations
+
+#### Tap Target Sizing
+
+Ensure interactive elements are at least 44×44px:
+
+```tsx
+// ✅ CORRECT: Adequate tap target
+<button className="h-11 px-4 py-3">
+  Click me
+</button>
+
+// ✅ CORRECT: Icon button with proper size
+<button className="h-11 w-11 flex items-center justify-center">
+  <Icon className="h-5 w-5" />
+</button>
+
+// ❌ WRONG: Too small for touch
+<button className="h-6 px-2">
+  Click me
+</button>
+```
+
+#### Focus States
+
+Don't rely solely on hover; provide visible focus states:
+
+```tsx
+<button
+  className="
+    bg-primary text-primary-foreground
+    hover:bg-primary/90
+    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2
+  "
+>
+  Action
+</button>
+```
+
+#### Scroll and Gesture Handling
+
+```tsx
+// Horizontal scroll for carousels
+<div className="overflow-x-auto scrollbar-hide">
+  <div className="flex gap-4 min-w-max">
+    {items.map((item) => (
+      <Card key={item.id} className="w-64 flex-shrink-0" />
+    ))}
+  </div>
+</div>
+
+// Prevent scroll traps
+<div className="overflow-y-auto max-h-[80vh]">
+  {/* Scrollable content */}
+</div>
+```
+
+---
+
+### 10.7 The `cn()` Utility
+
+The `cn()` function merges Tailwind classes intelligently, handling conflicts:
+
+```typescript
+// src/lib/utils.ts
+
+import { type ClassValue, clsx } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+```
+
+#### Usage Examples
+
+```tsx
+// Merge base classes with props
+<div className={cn('p-4 bg-card', className)}>
+
+// Conditional classes
+<div className={cn(
+  'p-4 rounded-md',
+  isActive && 'bg-primary text-primary-foreground',
+  isDisabled && 'opacity-50 pointer-events-none'
+)}>
+
+// Override conflicts (twMerge handles this)
+cn('p-4', 'p-6')  // Result: 'p-6' (not 'p-4 p-6')
+cn('text-red-500', 'text-blue-500')  // Result: 'text-blue-500'
+```
+
+---
+
+### 10.8 Quick Reference: Do's and Don'ts
+
+#### Do ✅
+
+- Use semantic tokens (`bg-primary`, `text-foreground`)
+- Use CVA for components with variants
+- Follow class ordering convention
+- Ensure 44×44px minimum tap targets
+- Use `cn()` for class merging
+- Test at custom `lg` breakpoint (1150px)
+
+#### Don't ❌
+
+- Hardcode hex colors (`bg-[#1a1a1a]`)
+- Create ad-hoc global CSS classes
+- Rely solely on hover states
+- Use inline styles for theming
+- Duplicate variant logic across components
+- Ignore dark mode compatibility
 
 ---
 

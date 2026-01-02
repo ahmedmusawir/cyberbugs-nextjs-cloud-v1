@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Bug Report (Tester View)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#135bec",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101622",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+<div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
+<!-- Header -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-gray-200 dark:border-[#282e39] bg-white dark:bg-[#111318] px-10 py-3">
+<div class="flex items-center gap-4 text-gray-900 dark:text-white">
+<div class="size-6 text-primary">
+<span class="material-symbols-outlined !text-[24px]">bug_report</span>
+</div>
+<h2 class="text-lg font-bold leading-tight tracking-[-0.015em]">BugTracker Pro</h2>
+</div>
+<div class="flex flex-1 justify-end gap-8">
+<div class="hidden md:flex items-center gap-9">
+<a class="text-gray-600 dark:text-white text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Dashboard</a>
+<a class="text-gray-600 dark:text-white text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Projects</a>
+<a class="text-gray-600 dark:text-white text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Reports</a>
+</div>
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary hover:bg-blue-700 transition-colors text-white text-sm font-bold leading-normal tracking-[0.015em]">
+<span class="truncate">New Report</span>
+</button>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 ring-2 ring-white dark:ring-gray-800" data-alt="User profile avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDNa5bREJw7YVEnT6J-4KU3y5ELwIvvrLb3BImi6Bm3IiOh_PMpHXFTbN2Y31LGloKNbDsG7NHtWEsttzInwETcsTKyRpKltx6F24wIXuqohUYTwtVliUM29KFi8_4KrA_OJf9SPHOTS23OxRA0YuaAj-cXcrrPb7nAVnk_9Adq-BbEnCqdzuWupf_LCk7nY0MzZdu5h_oMmy8P5YQI4bB_KvDD_Lr7esDm623CTfjSw0LucKcxOmOeg0_F3aE82P9X_a39wJh36s4");'></div>
+</div>
+</header>
+<main class="layout-container flex h-full grow flex-col">
+<div class="px-4 md:px-10 lg:px-40 flex flex-1 justify-center py-5">
+<div class="layout-content-container flex flex-col max-w-[960px] flex-1">
+<!-- Breadcrumbs -->
+<div class="flex flex-wrap gap-2 px-4 pt-4 pb-2">
+<a class="text-gray-500 dark:text-[#9da6b9] text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Home</a>
+<span class="text-gray-500 dark:text-[#9da6b9] text-sm font-medium leading-normal">/</span>
+<a class="text-gray-500 dark:text-[#9da6b9] text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Projects</a>
+<span class="text-gray-500 dark:text-[#9da6b9] text-sm font-medium leading-normal">/</span>
+<span class="text-gray-900 dark:text-white text-sm font-medium leading-normal">Report Bug</span>
+</div>
+<!-- Page Heading -->
+<div class="flex flex-wrap justify-between gap-3 px-4 py-4">
+<div class="flex min-w-72 flex-col gap-2">
+<h1 class="text-gray-900 dark:text-white text-4xl font-black leading-tight tracking-[-0.033em]">Report a Defect</h1>
+<p class="text-gray-500 dark:text-[#9da6b9] text-base font-normal leading-normal">Submit a new bug report for the development team to review.</p>
+</div>
+</div>
+<!-- Main Form Container -->
+<div class="px-4 py-2">
+<div class="bg-white dark:bg-[#1c1f27] rounded-xl border border-gray-200 dark:border-[#282e39] p-6 shadow-sm">
+<!-- Section 1: Context -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+<label class="flex flex-col flex-1">
+<p class="text-gray-900 dark:text-white text-base font-medium leading-normal pb-2">Target Application <span class="text-red-500">*</span></p>
+<div class="relative">
+<select class="form-select w-full rounded-lg border border-gray-300 dark:border-[#3b4354] bg-gray-50 dark:bg-[#111318] text-gray-900 dark:text-white focus:border-primary focus:ring-primary h-12 px-4 appearance-none">
+<option disabled="" selected="" value="">Select an application</option>
+<option value="ecommerce">E-commerce Platform</option>
+<option value="crm">Customer CRM</option>
+<option value="mobile">Mobile App (iOS)</option>
+</select>
+<span class="material-symbols-outlined absolute right-4 top-3 pointer-events-none text-gray-500">expand_more</span>
+</div>
+</label>
+<div class="flex flex-col flex-1">
+<p class="text-gray-900 dark:text-white text-base font-medium leading-normal pb-2">Environment</p>
+<div class="flex flex-wrap gap-2">
+<label class="cursor-pointer group">
+<input checked="" class="peer sr-only" name="environment" type="radio"/>
+<div class="flex h-12 items-center justify-center rounded-lg border border-gray-300 dark:border-[#3b4354] px-5 bg-gray-50 dark:bg-[#111318] text-gray-500 dark:text-[#9da6b9] peer-checked:border-primary peer-checked:bg-primary/10 peer-checked:text-primary transition-all">
+<span class="text-sm font-medium">Production</span>
+</div>
+</label>
+<label class="cursor-pointer group">
+<input class="peer sr-only" name="environment" type="radio"/>
+<div class="flex h-12 items-center justify-center rounded-lg border border-gray-300 dark:border-[#3b4354] px-5 bg-gray-50 dark:bg-[#111318] text-gray-500 dark:text-[#9da6b9] peer-checked:border-primary peer-checked:bg-primary/10 peer-checked:text-primary transition-all">
+<span class="text-sm font-medium">Staging</span>
+</div>
+</label>
+<label class="cursor-pointer group">
+<input class="peer sr-only" name="environment" type="radio"/>
+<div class="flex h-12 items-center justify-center rounded-lg border border-gray-300 dark:border-[#3b4354] px-5 bg-gray-50 dark:bg-[#111318] text-gray-500 dark:text-[#9da6b9] peer-checked:border-primary peer-checked:bg-primary/10 peer-checked:text-primary transition-all">
+<span class="text-sm font-medium">Dev</span>
+</div>
+</label>
+</div>
+</div>
+</div>
+<!-- Section 2: Bug Details -->
+<div class="flex flex-col gap-6 mb-8">
+<label class="flex flex-col w-full">
+<p class="text-gray-900 dark:text-white text-base font-medium leading-normal pb-2">Bug Title <span class="text-red-500">*</span></p>
+<input class="w-full rounded-lg border border-gray-300 dark:border-[#3b4354] bg-gray-50 dark:bg-[#111318] text-gray-900 dark:text-white focus:border-primary focus:ring-primary h-12 px-4 placeholder:text-gray-400 dark:placeholder:text-[#6b7280]" placeholder="e.g., Login fails when password contains special characters" type="text"/>
+</label>
+<div>
+<p class="text-gray-900 dark:text-white text-base font-medium leading-normal pb-2">Severity</p>
+<div class="flex flex-wrap gap-3">
+<label class="cursor-pointer">
+<input class="peer sr-only" name="severity" type="radio"/>
+<div class="flex items-center gap-2 rounded-full border border-gray-200 dark:border-[#3b4354] px-4 py-2 bg-gray-50 dark:bg-[#111318] text-gray-600 dark:text-gray-400 peer-checked:border-green-500 peer-checked:bg-green-500/10 peer-checked:text-green-500 hover:bg-gray-100 dark:hover:bg-[#252a35] transition-all">
+<span class="material-symbols-outlined text-[18px]">low_priority</span>
+<span class="text-sm font-medium">Low</span>
+</div>
+</label>
+<label class="cursor-pointer">
+<input checked="" class="peer sr-only" name="severity" type="radio"/>
+<div class="flex items-center gap-2 rounded-full border border-gray-200 dark:border-[#3b4354] px-4 py-2 bg-gray-50 dark:bg-[#111318] text-gray-600 dark:text-gray-400 peer-checked:border-yellow-500 peer-checked:bg-yellow-500/10 peer-checked:text-yellow-500 hover:bg-gray-100 dark:hover:bg-[#252a35] transition-all">
+<span class="material-symbols-outlined text-[18px]">warning</span>
+<span class="text-sm font-medium">Medium</span>
+</div>
+</label>
+<label class="cursor-pointer">
+<input class="peer sr-only" name="severity" type="radio"/>
+<div class="flex items-center gap-2 rounded-full border border-gray-200 dark:border-[#3b4354] px-4 py-2 bg-gray-50 dark:bg-[#111318] text-gray-600 dark:text-gray-400 peer-checked:border-orange-500 peer-checked:bg-orange-500/10 peer-checked:text-orange-500 hover:bg-gray-100 dark:hover:bg-[#252a35] transition-all">
+<span class="material-symbols-outlined text-[18px]">error</span>
+<span class="text-sm font-medium">High</span>
+</div>
+</label>
+<label class="cursor-pointer">
+<input class="peer sr-only" name="severity" type="radio"/>
+<div class="flex items-center gap-2 rounded-full border border-gray-200 dark:border-[#3b4354] px-4 py-2 bg-gray-50 dark:bg-[#111318] text-gray-600 dark:text-gray-400 peer-checked:border-red-600 peer-checked:bg-red-600/10 peer-checked:text-red-500 hover:bg-gray-100 dark:hover:bg-[#252a35] transition-all">
+<span class="material-symbols-outlined text-[18px]">dangerous</span>
+<span class="text-sm font-medium">Critical</span>
+</div>
+</label>
+</div>
+</div>
+<label class="flex flex-col w-full">
+<p class="text-gray-900 dark:text-white text-base font-medium leading-normal pb-2">Description</p>
+<textarea class="w-full rounded-lg border border-gray-300 dark:border-[#3b4354] bg-gray-50 dark:bg-[#111318] text-gray-900 dark:text-white focus:border-primary focus:ring-primary p-4 placeholder:text-gray-400 dark:placeholder:text-[#6b7280] resize-y" placeholder="Describe the issue in detail..." rows="4"></textarea>
+</label>
+<div class="flex flex-col gap-3">
+<div class="flex justify-between items-center">
+<p class="text-gray-900 dark:text-white text-base font-medium leading-normal">Steps to Reproduce</p>
+<button class="text-primary text-sm font-bold hover:text-blue-400 flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]">add</span> Add Step
+                                        </button>
+</div>
+<div class="flex flex-col gap-2">
+<div class="flex gap-3 items-center">
+<span class="text-gray-400 text-sm font-mono w-4">1.</span>
+<input class="flex-1 rounded-lg border border-gray-300 dark:border-[#3b4354] bg-gray-50 dark:bg-[#111318] text-gray-900 dark:text-white focus:border-primary focus:ring-primary h-10 px-3 text-sm" type="text" value="Go to the login page"/>
+<button class="text-gray-400 hover:text-red-500"><span class="material-symbols-outlined text-[20px]">delete</span></button>
+</div>
+<div class="flex gap-3 items-center">
+<span class="text-gray-400 text-sm font-mono w-4">2.</span>
+<input class="flex-1 rounded-lg border border-gray-300 dark:border-[#3b4354] bg-gray-50 dark:bg-[#111318] text-gray-900 dark:text-white focus:border-primary focus:ring-primary h-10 px-3 text-sm" type="text" value="Enter 'admin' as username"/>
+<button class="text-gray-400 hover:text-red-500"><span class="material-symbols-outlined text-[20px]">delete</span></button>
+</div>
+<div class="flex gap-3 items-center">
+<span class="text-gray-400 text-sm font-mono w-4">3.</span>
+<input class="flex-1 rounded-lg border border-gray-300 dark:border-[#3b4354] bg-gray-50 dark:bg-[#111318] text-gray-900 dark:text-white focus:border-primary focus:ring-primary h-10 px-3 text-sm placeholder:text-gray-400 dark:placeholder:text-[#6b7280]" placeholder="Enter next step..." type="text"/>
+<button class="text-gray-400 hover:text-red-500"><span class="material-symbols-outlined text-[20px]">delete</span></button>
+</div>
+</div>
+</div>
+</div>
+<!-- Section 3: Evidence / Attachments -->
+<div class="mb-8">
+<p class="text-gray-900 dark:text-white text-base font-medium leading-normal pb-2">Attachments</p>
+<div class="border-2 border-dashed border-gray-300 dark:border-[#3b4354] rounded-xl p-8 flex flex-col items-center justify-center text-center hover:bg-gray-50 dark:hover:bg-[#252a35] transition-colors cursor-pointer group">
+<div class="size-12 rounded-full bg-gray-100 dark:bg-[#3b4354] flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-gray-500 dark:text-gray-300 text-[24px]">cloud_upload</span>
+</div>
+<p class="text-gray-900 dark:text-white text-sm font-medium">Click to upload or drag and drop</p>
+<p class="text-gray-500 dark:text-[#9da6b9] text-xs mt-1">SVG, PNG, JPG or GIF (max. 800x400px)</p>
+</div>
+<!-- File Preview List -->
+<div class="mt-4 flex flex-col gap-2">
+<div class="flex items-center justify-between p-3 rounded-lg bg-gray-50 dark:bg-[#111318] border border-gray-200 dark:border-[#282e39]">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">image</span>
+<div>
+<p class="text-sm font-medium text-gray-900 dark:text-white">screenshot-error-log.png</p>
+<p class="text-xs text-gray-500">2.4 MB</p>
+</div>
+</div>
+<button class="text-gray-400 hover:text-red-500 p-1 rounded-full hover:bg-gray-200 dark:hover:bg-[#252a35] transition-colors">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Footer Actions -->
+<div class="flex flex-col sm:flex-row items-center justify-end gap-4 pt-4 border-t border-gray-200 dark:border-[#282e39]">
+<button class="w-full sm:w-auto px-6 py-2.5 rounded-lg border border-gray-300 dark:border-[#3b4354] text-gray-700 dark:text-gray-300 text-sm font-bold hover:bg-gray-50 dark:hover:bg-[#252a35] transition-colors">
+                                    Save Draft
+                                </button>
+<button class="w-full sm:w-auto px-6 py-2.5 rounded-lg bg-primary text-white text-sm font-bold hover:bg-blue-700 transition-colors shadow-lg shadow-blue-900/20">
+                                    Submit Report
+                                </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

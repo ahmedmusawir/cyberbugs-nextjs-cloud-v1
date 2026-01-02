@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>User Settings - BugTracker</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#135bec",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101622",
+                        "surface-dark": "#181b21", // Slightly lighter for cards
+                        "border-dark": "#282e39",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom Toggle Switch */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #135bec;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #135bec;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-white antialiased min-h-screen flex flex-col overflow-hidden">
+<!-- Top Navigation -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-gray-200 dark:border-border-dark bg-white dark:bg-background-dark px-6 py-3 shrink-0 z-20">
+<div class="flex items-center gap-4 text-slate-900 dark:text-white">
+<div class="size-8 text-primary">
+<svg class="w-full h-full" fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_6_319)">
+<path d="M8.57829 8.57829C5.52816 11.6284 3.451 15.5145 2.60947 19.7452C1.76794 23.9758 2.19984 28.361 3.85056 32.3462C5.50128 36.3314 8.29667 39.7376 11.8832 42.134C15.4698 44.5305 19.6865 45.8096 24 45.8096C28.3135 45.8096 32.5302 44.5305 36.1168 42.134C39.7033 39.7375 42.4987 36.3314 44.1494 32.3462C45.8002 28.361 46.2321 23.9758 45.3905 19.7452C44.549 15.5145 42.4718 11.6284 39.4217 8.57829L24 24L8.57829 8.57829Z" fill="currentColor"></path>
+</g>
+<defs>
+<clippath id="clip0_6_319"><rect fill="white" height="48" width="48"></rect></clippath>
+</defs>
+</svg>
+</div>
+<h2 class="text-lg font-bold leading-tight tracking-[-0.015em]">BugTracker</h2>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden md:flex gap-2">
+<button class="flex items-center justify-center rounded-lg h-10 w-10 hover:bg-gray-100 dark:hover:bg-surface-dark text-slate-500 dark:text-slate-400 transition-colors">
+<span class="material-symbols-outlined text-[24px]">notifications</span>
+</button>
+<button class="flex items-center justify-center rounded-lg h-10 w-10 hover:bg-gray-100 dark:hover:bg-surface-dark text-slate-500 dark:text-slate-400 transition-colors">
+<span class="material-symbols-outlined text-[24px]">help</span>
+</button>
+</div>
+<div class="h-8 w-[1px] bg-gray-200 dark:bg-border-dark mx-2 hidden md:block"></div>
+<div class="flex items-center gap-3 cursor-pointer">
+<div class="text-right hidden sm:block">
+<p class="text-sm font-medium leading-none">John Doe</p>
+<p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Admin</p>
+</div>
+<div class="bg-center bg-no-repeat bg-cover rounded-full size-10 ring-2 ring-gray-100 dark:ring-border-dark" data-alt="User profile avatar showing a smiling person" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA_tBZqZHDvmy0aEzypz9fckFLP_K-48xa8c_zDft-_PlwnHTGeMrBRPalQq5DTd32GYrtfS0qYlcN_YWGAFW0Gb4CJL2n-wgVshButJKSYI9sfC2zSWu0CFc-rLR4Mdx6GHsYUCLskxc7DCsyH4rcEDSnMc07ECu4YPtVJLsbR8lkxgl6QGyw3ZLaOquC50aPT9sSWL6qXlkpfBe08LErMWm_EfkXF3RXuuJa2-5qvSCTGUwBfw2WDzbzORZQaoZWMUJ00z1te5YE");'></div>
+</div>
+</div>
+</header>
+<div class="flex flex-1 overflow-hidden relative">
+<!-- Sidebar Navigation -->
+<aside class="w-64 hidden lg:flex flex-col border-r border-gray-200 dark:border-border-dark bg-white dark:bg-background-dark z-10">
+<div class="p-4 space-y-1">
+<div class="px-3 py-2 text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Account</div>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/10 text-primary group transition-all" href="#profile">
+<span class="material-symbols-outlined filled">person</span>
+<span class="text-sm font-medium">Profile</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-surface-dark hover:text-slate-900 dark:hover:text-white transition-all" href="#security">
+<span class="material-symbols-outlined">lock</span>
+<span class="text-sm font-medium">Security</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-surface-dark hover:text-slate-900 dark:hover:text-white transition-all" href="#notifications">
+<span class="material-symbols-outlined">notifications</span>
+<span class="text-sm font-medium">Notifications</span>
+</a>
+</div>
+<div class="p-4 space-y-1 mt-4 border-t border-gray-200 dark:border-border-dark">
+<div class="px-3 py-2 text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Admin Panel</div>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-surface-dark hover:text-slate-900 dark:hover:text-white transition-all" href="#users">
+<span class="material-symbols-outlined">group</span>
+<span class="text-sm font-medium">User Management</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-surface-dark hover:text-slate-900 dark:hover:text-white transition-all" href="#system">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-sm font-medium">System Config</span>
+</a>
+</div>
+<div class="mt-auto p-4 border-t border-gray-200 dark:border-border-dark">
+<button class="flex items-center gap-3 px-3 py-2.5 w-full rounded-lg text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all">
+<span class="material-symbols-outlined">logout</span>
+<span class="text-sm font-medium">Log Out</span>
+</button>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 overflow-y-auto bg-gray-50 dark:bg-[#0f1115] p-4 lg:p-8 scroll-smooth">
+<div class="max-w-4xl mx-auto space-y-8 pb-10">
+<!-- Page Heading -->
+<div class="flex flex-col gap-2 mb-6">
+<h1 class="text-3xl font-black tracking-tight text-slate-900 dark:text-white">Profile Settings</h1>
+<p class="text-slate-500 dark:text-slate-400">Manage your personal information, security preferences, and system access.</p>
+</div>
+<!-- Profile Section -->
+<section class="bg-white dark:bg-surface-dark rounded-xl shadow-sm border border-gray-200 dark:border-border-dark overflow-hidden" id="profile">
+<div class="p-6 border-b border-gray-200 dark:border-border-dark">
+<h3 class="text-lg font-bold text-slate-900 dark:text-white">Personal Information</h3>
+<p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Update your photo and personal details.</p>
+</div>
+<div class="p-6 space-y-8">
+<!-- Avatar -->
+<div class="flex flex-col sm:flex-row gap-6 items-start sm:items-center">
+<div class="relative group cursor-pointer">
+<div class="bg-center bg-no-repeat bg-cover rounded-full h-24 w-24 ring-4 ring-gray-100 dark:ring-border-dark" data-alt="User profile avatar close up" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAjVTOJiUTCRd-zU5PK7XKPrTRAkdu2M-dqvVMWDylYsG4LrqD10vDa3Z1HEg4g1pIUmbVEA4SF4CBdsMAx4Flaat4L5xtLeWlIoArPL5psi__qcTXwTeUWuuj6afCPhR8ytemrJv8Gx06ZPYKJtw2HLWhV5Sc94-fq_YCtoNbMMwn89qvi_ETkNy0jkVqAqAzUkvnOCT5R3o9r7pj5CCFP2yvf1ydtYf4-f35jXfIN0tKYUMmm6z22x2vhvYfgvOpWlF2RPcsQ-Uk");'></div>
+<div class="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-white">edit</span>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<div class="flex gap-3">
+<button class="px-4 py-2 bg-primary text-white text-sm font-semibold rounded-lg hover:bg-blue-600 transition-colors shadow-sm shadow-blue-500/20">Change Avatar</button>
+<button class="px-4 py-2 bg-white dark:bg-border-dark text-slate-700 dark:text-white text-sm font-semibold rounded-lg border border-gray-300 dark:border-transparent hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors">Delete</button>
+</div>
+<p class="text-xs text-slate-500 dark:text-slate-400">JPG, GIF or PNG. 1MB max.</p>
+</div>
+</div>
+<!-- Form Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="space-y-2">
+<label class="text-sm font-medium text-slate-700 dark:text-slate-300">First Name</label>
+<input class="w-full h-10 px-3 rounded-lg bg-gray-50 dark:bg-background-dark border border-gray-300 dark:border-border-dark focus:ring-2 focus:ring-primary focus:border-primary text-slate-900 dark:text-white placeholder-slate-400 transition-all" type="text" value="John"/>
+</div>
+<div class="space-y-2">
+<label class="text-sm font-medium text-slate-700 dark:text-slate-300">Last Name</label>
+<input class="w-full h-10 px-3 rounded-lg bg-gray-50 dark:bg-background-dark border border-gray-300 dark:border-border-dark focus:ring-2 focus:ring-primary focus:border-primary text-slate-900 dark:text-white placeholder-slate-400 transition-all" type="text" value="Doe"/>
+</div>
+<div class="space-y-2">
+<label class="text-sm font-medium text-slate-700 dark:text-slate-300">Email Address</label>
+<div class="relative">
+<span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400">
+<span class="material-symbols-outlined text-[20px]">mail</span>
+</span>
+<input class="w-full h-10 pl-10 pr-3 rounded-lg bg-gray-50 dark:bg-background-dark border border-gray-300 dark:border-border-dark focus:ring-2 focus:ring-primary focus:border-primary text-slate-900 dark:text-white placeholder-slate-400 transition-all" type="email" value="john.doe@example.com"/>
+</div>
+</div>
+<div class="space-y-2">
+<label class="text-sm font-medium text-slate-700 dark:text-slate-300">Role</label>
+<input class="w-full h-10 px-3 rounded-lg bg-gray-100 dark:bg-background-dark/50 border border-gray-300 dark:border-border-dark text-slate-500 dark:text-slate-500 cursor-not-allowed" readonly="" type="text" value="Senior QA Tester"/>
+</div>
+</div>
+<div class="space-y-2">
+<label class="text-sm font-medium text-slate-700 dark:text-slate-300">Bio</label>
+<textarea class="w-full p-3 rounded-lg bg-gray-50 dark:bg-background-dark border border-gray-300 dark:border-border-dark focus:ring-2 focus:ring-primary focus:border-primary text-slate-900 dark:text-white placeholder-slate-400 transition-all resize-none" rows="3">Senior tester with 5+ years of experience in automation and manual testing.</textarea>
+<p class="text-xs text-slate-500 dark:text-slate-400 text-right">250 characters left</p>
+</div>
+</div>
+<div class="px-6 py-4 bg-gray-50 dark:bg-background-dark/50 border-t border-gray-200 dark:border-border-dark flex justify-end gap-3">
+<button class="px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">Cancel</button>
+<button class="px-4 py-2 bg-primary text-white text-sm font-semibold rounded-lg hover:bg-blue-600 transition-colors shadow-sm shadow-blue-500/20">Save Changes</button>
+</div>
+</section>
+<!-- Security Section -->
+<section class="bg-white dark:bg-surface-dark rounded-xl shadow-sm border border-gray-200 dark:border-border-dark overflow-hidden" id="security">
+<div class="p-6 border-b border-gray-200 dark:border-border-dark">
+<h3 class="text-lg font-bold text-slate-900 dark:text-white">Security</h3>
+<p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Manage your password and 2-factor authentication.</p>
+</div>
+<div class="p-6 space-y-8">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="space-y-2">
+<label class="text-sm font-medium text-slate-700 dark:text-slate-300">Current Password</label>
+<input class="w-full h-10 px-3 rounded-lg bg-gray-50 dark:bg-background-dark border border-gray-300 dark:border-border-dark focus:ring-2 focus:ring-primary focus:border-primary text-slate-900 dark:text-white placeholder-slate-400 transition-all" placeholder="••••••••" type="password"/>
+</div>
+<div class="space-y-2">
+<label class="text-sm font-medium text-slate-700 dark:text-slate-300">New Password</label>
+<input class="w-full h-10 px-3 rounded-lg bg-gray-50 dark:bg-background-dark border border-gray-300 dark:border-border-dark focus:ring-2 focus:ring-primary focus:border-primary text-slate-900 dark:text-white placeholder-slate-400 transition-all" type="password"/>
+</div>
+<div class="space-y-2">
+<label class="text-sm font-medium text-slate-700 dark:text-slate-300">Confirm Password</label>
+<input class="w-full h-10 px-3 rounded-lg bg-gray-50 dark:bg-background-dark border border-gray-300 dark:border-border-dark focus:ring-2 focus:ring-primary focus:border-primary text-slate-900 dark:text-white placeholder-slate-400 transition-all" type="password"/>
+</div>
+</div>
+<div class="pt-6 border-t border-gray-200 dark:border-border-dark flex items-center justify-between">
+<div class="flex flex-col gap-1">
+<span class="text-sm font-bold text-slate-900 dark:text-white">Two-Factor Authentication</span>
+<span class="text-sm text-slate-500 dark:text-slate-400">Add an extra layer of security to your account.</span>
+</div>
+<div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+<input class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer border-slate-300 dark:border-slate-600 transition-all duration-300" id="2fa-toggle" name="toggle" type="checkbox"/>
+<label class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 dark:bg-slate-700 cursor-pointer transition-colors duration-300" for="2fa-toggle"></label>
+</div>
+</div>
+</div>
+</section>
+<!-- Notifications Section -->
+<section class="bg-white dark:bg-surface-dark rounded-xl shadow-sm border border-gray-200 dark:border-border-dark overflow-hidden" id="notifications">
+<div class="p-6 border-b border-gray-200 dark:border-border-dark">
+<h3 class="text-lg font-bold text-slate-900 dark:text-white">Notifications</h3>
+<p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Choose how you receive updates.</p>
+</div>
+<div class="p-6 space-y-6">
+<div class="space-y-4">
+<h4 class="text-sm font-semibold uppercase tracking-wide text-primary">Email Alerts</h4>
+<div class="flex items-center justify-between">
+<span class="text-sm text-slate-700 dark:text-slate-300">New bug assigned to me</span>
+<div class="relative inline-block w-10 align-middle select-none">
+<input checked="" class="peer sr-only" id="notif-1" type="checkbox"/>
+<label class="block h-6 bg-gray-300 dark:bg-slate-700 rounded-full cursor-pointer peer-checked:bg-primary transition-colors after:content-[''] after:absolute after:top-1 after:left-1 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-4" for="notif-1"></label>
+</div>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-sm text-slate-700 dark:text-slate-300">Status change on my reported bugs</span>
+<div class="relative inline-block w-10 align-middle select-none">
+<input checked="" class="peer sr-only" id="notif-2" type="checkbox"/>
+<label class="block h-6 bg-gray-300 dark:bg-slate-700 rounded-full cursor-pointer peer-checked:bg-primary transition-colors after:content-[''] after:absolute after:top-1 after:left-1 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-4" for="notif-2"></label>
+</div>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-sm text-slate-700 dark:text-slate-300">Mentions in comments</span>
+<div class="relative inline-block w-10 align-middle select-none">
+<input class="peer sr-only" id="notif-3" type="checkbox"/>
+<label class="block h-6 bg-gray-300 dark:bg-slate-700 rounded-full cursor-pointer peer-checked:bg-primary transition-colors after:content-[''] after:absolute after:top-1 after:left-1 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-4" for="notif-3"></label>
+</div>
+</div>
+</div>
+<div class="h-px bg-gray-200 dark:bg-border-dark"></div>
+<div class="space-y-4">
+<h4 class="text-sm font-semibold uppercase tracking-wide text-primary">In-App Notifications</h4>
+<div class="flex items-center justify-between">
+<span class="text-sm text-slate-700 dark:text-slate-300">Critical bug alerts</span>
+<div class="relative inline-block w-10 align-middle select-none">
+<input checked="" class="peer sr-only" id="notif-4" type="checkbox"/>
+<label class="block h-6 bg-gray-300 dark:bg-slate-700 rounded-full cursor-pointer peer-checked:bg-primary transition-colors after:content-[''] after:absolute after:top-1 after:left-1 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-4" for="notif-4"></label>
+</div>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-sm text-slate-700 dark:text-slate-300">New team member added</span>
+<div class="relative inline-block w-10 align-middle select-none">
+<input class="peer sr-only" id="notif-5" type="checkbox"/>
+<label class="block h-6 bg-gray-300 dark:bg-slate-700 rounded-full cursor-pointer peer-checked:bg-primary transition-colors after:content-[''] after:absolute after:top-1 after:left-1 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-4" for="notif-5"></label>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Admin: User Management -->
+<section class="pt-4" id="users">
+<div class="flex items-center justify-between mb-4">
+<div class="flex flex-col gap-1">
+<h3 class="text-xl font-bold text-slate-900 dark:text-white">User Management</h3>
+<p class="text-sm text-slate-500 dark:text-slate-400">Admin access only</p>
+</div>
+<button class="flex items-center gap-2 px-4 py-2 bg-primary text-white text-sm font-semibold rounded-lg hover:bg-blue-600 transition-colors shadow-sm shadow-blue-500/20">
+<span class="material-symbols-outlined text-[20px]">add</span>
+                            Add New User
+                        </button>
+</div>
+<div class="bg-white dark:bg-surface-dark rounded-xl shadow-sm border border-gray-200 dark:border-border-dark overflow-hidden">
+<!-- Search / Filter -->
+<div class="p-4 border-b border-gray-200 dark:border-border-dark flex flex-col sm:flex-row gap-4">
+<div class="relative flex-1">
+<span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400">
+<span class="material-symbols-outlined text-[20px]">search</span>
+</span>
+<input class="w-full h-10 pl-10 pr-3 rounded-lg bg-gray-50 dark:bg-background-dark border border-gray-300 dark:border-border-dark focus:ring-2 focus:ring-primary focus:border-primary text-slate-900 dark:text-white placeholder-slate-400 text-sm" placeholder="Search users by name or email..." type="text"/>
+</div>
+<div class="flex gap-3">
+<select class="h-10 px-3 rounded-lg bg-gray-50 dark:bg-background-dark border border-gray-300 dark:border-border-dark focus:ring-2 focus:ring-primary text-slate-700 dark:text-white text-sm">
+<option>All Roles</option>
+<option>Admin</option>
+<option>Tester</option>
+<option>Developer</option>
+</select>
+<select class="h-10 px-3 rounded-lg bg-gray-50 dark:bg-background-dark border border-gray-300 dark:border-border-dark focus:ring-2 focus:ring-primary text-slate-700 dark:text-white text-sm">
+<option>Active</option>
+<option>Inactive</option>
+</select>
+</div>
+</div>
+<!-- Table -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-gray-50 dark:bg-background-dark/50 border-b border-gray-200 dark:border-border-dark">
+<th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500">User</th>
+<th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500">Role</th>
+<th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500">Status</th>
+<th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500 text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-gray-200 dark:divide-border-dark">
+<!-- Row 1 -->
+<tr class="hover:bg-gray-50 dark:hover:bg-background-dark/30 transition-colors">
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center gap-3">
+<div class="bg-center bg-no-repeat bg-cover rounded-full h-9 w-9" data-alt="Avatar of user Sarah Smith" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCN7l_AAXSWOs8hSM6iyPBpHcrYmPqWtaH3o--kuiEEQlYkLXlIXf1AFpzeyIcSv0xBIv_r_mdV9gaqpYJlvVIkBCe4loHvJkLdjmiD8AECny76tYKX_9qECPajWgly5SShdCjQA0GMp-Id4AJ0cAhZEsI2JEvEcox8vjz9pfzwyQWVWhdnN1DF2qNzN_l6HnEZj-4Jw1z_v2kZL_RCur2EtAQoI7rQJDi_7a566mD4oEJw8DqDzjeQxnTTH2SCa_1A1MNa776PzF4");'></div>
+<div>
+<p class="text-sm font-medium text-slate-900 dark:text-white">Sarah Smith</p>
+<p class="text-xs text-slate-500 dark:text-slate-400">sarah.s@bugtracker.com</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300">
+                                                Admin
+                                            </span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300">
+<span class="w-1.5 h-1.5 rounded-full bg-green-500"></span>
+                                                Active
+                                            </span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+<button class="text-slate-400 hover:text-primary transition-colors p-1"><span class="material-symbols-outlined text-[20px]">edit</span></button>
+<button class="text-slate-400 hover:text-red-500 transition-colors p-1"><span class="material-symbols-outlined text-[20px]">delete</span></button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-gray-50 dark:hover:bg-background-dark/30 transition-colors">
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center gap-3">
+<div class="bg-center bg-no-repeat bg-cover rounded-full h-9 w-9" data-alt="Avatar of user Michael Brown" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDByirDi8tBy6AkwrZzr3DQ6yHE2sq1D3seIDYcNjzPtPAQD07fBdApxxxfpMh_7ccfLYHXmMEUkOAZk-wNDw_qiKgLXcXSvTpWo_gO8XBhK84tEDWkh3WRrwvYfhtO-irkzXM6ZOlhe_n3UuQ0cBJMLRgetvq5Q3VKwgsaGbTtKTL-xCFi_hq-dG1bF9wuLet1YX4yeUCkvJ2xMcZovIEhrI3nmRUq4jw1FtMlCoPrV7Dl1EQ6cDhFceeQ5SceEtmdH5TC_w0P8FQ");'></div>
+<div>
+<p class="text-sm font-medium text-slate-900 dark:text-white">Michael Brown</p>
+<p class="text-xs text-slate-500 dark:text-slate-400">m.brown@bugtracker.com</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">
+                                                Tester
+                                            </span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300">
+<span class="w-1.5 h-1.5 rounded-full bg-green-500"></span>
+                                                Active
+                                            </span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+<button class="text-slate-400 hover:text-primary transition-colors p-1"><span class="material-symbols-outlined text-[20px]">edit</span></button>
+<button class="text-slate-400 hover:text-red-500 transition-colors p-1"><span class="material-symbols-outlined text-[20px]">delete</span></button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-gray-50 dark:hover:bg-background-dark/30 transition-colors">
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center gap-3">
+<div class="bg-center bg-no-repeat bg-cover rounded-full h-9 w-9" data-alt="Avatar of user Emily Chen" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDBEaeE0S-s6JILKcnfslVzm24jkzlVxt6-7tSewAnS2JA92DdAA-Z7ya_drTeAzx-nSV3v2x5byrdG8h06suW2pbs2FJmuNE-gef53qWTCqywQ6TLHdQ6C40ji4MxaGuhOkK7sf2QfAWJJtCr9vs96n5johmhMz6V0ZBOCyatyclRqsweDkFXpOaI2foNj4Bli3eDKQgdHxcojolNzhIPEShGkKU39Tm1JGgGUecFJKUBKPlXwMNdH4aFKQo8BWLpvK7YU4IaBOSM");'></div>
+<div>
+<p class="text-sm font-medium text-slate-900 dark:text-white">Emily Chen</p>
+<p class="text-xs text-slate-500 dark:text-slate-400">e.chen@bugtracker.com</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300">
+                                                Developer
+                                            </span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-300">
+<span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span>
+                                                Offline
+                                            </span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+<button class="text-slate-400 hover:text-primary transition-colors p-1"><span class="material-symbols-outlined text-[20px]">edit</span></button>
+<button class="text-slate-400 hover:text-red-500 transition-colors p-1"><span class="material-symbols-outlined text-[20px]">delete</span></button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="px-6 py-4 border-t border-gray-200 dark:border-border-dark flex items-center justify-between">
+<span class="text-sm text-slate-500 dark:text-slate-400">Showing 1 to 3 of 12 users</span>
+<div class="flex gap-2">
+<button class="px-3 py-1 text-sm font-medium text-slate-500 dark:text-slate-400 bg-white dark:bg-background-dark border border-gray-300 dark:border-border-dark rounded hover:bg-gray-50 dark:hover:bg-background-dark/80 disabled:opacity-50" disabled="">Previous</button>
+<button class="px-3 py-1 text-sm font-medium text-slate-500 dark:text-slate-400 bg-white dark:bg-background-dark border border-gray-300 dark:border-border-dark rounded hover:bg-gray-50 dark:hover:bg-background-dark/80">Next</button>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+</div>
+</body></html>

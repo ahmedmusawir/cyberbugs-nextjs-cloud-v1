@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>App Details (Admin View)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#135bec",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101622",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar for better look in dark mode */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1e293b; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569; 
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white font-display antialiased overflow-hidden">
+<div class="flex h-screen w-full">
+<!-- Sidebar -->
+<div class="hidden md:flex w-64 flex-col bg-white dark:bg-[#111318] border-r border-slate-200 dark:border-slate-800 shrink-0">
+<div class="flex h-full flex-col justify-between p-4">
+<div class="flex flex-col gap-6">
+<!-- User Profile / App Brand -->
+<div class="flex items-center gap-3 px-2">
+<div class="bg-center bg-no-repeat bg-cover rounded-full size-10 shadow-inner" data-alt="Abstract geometric avatar for user profile" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBDN3BptPy7xppz92bX7csqYkIuFsdc2ebghgGcFkGZVnMo5t50T1ojLCt0wB0ZSvVB6T81CFcIGyAMRSXOKLOHYNC-JFnpmW810xAO3JYmI5ejey6DZLcnqUlfheGrKpJEJT6-hCmylEGzW7-9WumhcmQhfs4RSyubK2yaoo7kA8YObwnqm6F2FL4V3BPY6fMvPqaUuEvlfFf_vIkMRrr5B_PVVY3FuL48KNScy5RY3LkWzs3dz3M2kE-xG6caQ2ZUvjsXj4ZF1hA");'></div>
+<div class="flex flex-col">
+<h1 class="text-slate-900 dark:text-white text-base font-semibold leading-tight">Admin Console</h1>
+<p class="text-slate-500 dark:text-[#9da6b9] text-xs font-normal">Bug Tracker Pro</p>
+</div>
+</div>
+<!-- Navigation -->
+<div class="flex flex-col gap-2">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-[#9da6b9] hover:bg-slate-100 dark:hover:bg-[#1e2330] transition-colors" href="#">
+<span class="material-symbols-outlined text-2xl">dashboard</span>
+<p class="text-sm font-medium">Dashboard</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-primary/10 dark:bg-[#282e39] text-primary dark:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-2xl fill-1">smartphone</span>
+<p class="text-sm font-medium">Apps</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-[#9da6b9] hover:bg-slate-100 dark:hover:bg-[#1e2330] transition-colors" href="#">
+<span class="material-symbols-outlined text-2xl">group</span>
+<p class="text-sm font-medium">Users</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-[#9da6b9] hover:bg-slate-100 dark:hover:bg-[#1e2330] transition-colors" href="#">
+<span class="material-symbols-outlined text-2xl">settings</span>
+<p class="text-sm font-medium">Settings</p>
+</a>
+</div>
+</div>
+<!-- Bottom Actions -->
+<div class="flex flex-col gap-2 border-t border-slate-200 dark:border-slate-800 pt-4">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-[#9da6b9] hover:bg-slate-100 dark:hover:bg-[#1e2330] transition-colors" href="#">
+<span class="material-symbols-outlined text-2xl">help</span>
+<p class="text-sm font-medium">Support</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-[#9da6b9] hover:bg-slate-100 dark:hover:bg-[#1e2330] transition-colors" href="#">
+<span class="material-symbols-outlined text-2xl">logout</span>
+<p class="text-sm font-medium">Log Out</p>
+</a>
+</div>
+</div>
+</div>
+<!-- Main Content -->
+<div class="flex-1 flex flex-col h-full overflow-hidden relative">
+<!-- Header Bar -->
+<header class="h-16 flex items-center justify-between px-6 bg-white dark:bg-[#111318] border-b border-slate-200 dark:border-slate-800 shrink-0">
+<div class="flex items-center gap-2">
+<!-- Mobile Menu Toggle -->
+<button class="md:hidden p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<!-- Breadcrumbs -->
+<div class="flex items-center gap-2 text-sm">
+<a class="text-slate-500 dark:text-[#9da6b9] hover:text-primary transition-colors" href="#">Dashboard</a>
+<span class="text-slate-400 dark:text-[#58627a]">/</span>
+<a class="text-slate-500 dark:text-[#9da6b9] hover:text-primary transition-colors" href="#">Apps</a>
+<span class="text-slate-400 dark:text-[#58627a]">/</span>
+<span class="text-slate-900 dark:text-white font-medium">Apollo CRM</span>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<button class="flex items-center justify-center size-8 rounded-full text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-[#282e39] transition-colors">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+</button>
+<div class="size-8 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden" data-alt="User profile picture placeholder">
+<img alt="User Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDWrvWKjEWQUA0z3tuYEIxlCvh2A1a8N8qlbBrPOrkMFm10yCW9JT05OScmjeWsfMWo1LaDRjcS08hZs7AOzf4n6_k5UryKSLUOx67oPE5mCU0f9PDw5MMixSZIvV9P35kmFJ1MhYihVpXYoZ0f0E2eDRc1GDyPv0zRn5o3JW9Fr6H_ddA9vo_AdSwSXATB3P10QJ8ePdB0HIfnHg1QFdAx2rvPY2wDvXoc1I2BJIaMoTPd3BnrQe_eWBIoMtw_FfXKNdJFv8kaSn4"/>
+</div>
+</div>
+</header>
+<!-- Scrollable Content Area -->
+<main class="flex-1 overflow-y-auto p-4 md:p-8 scroll-smooth">
+<div class="max-w-[1200px] mx-auto flex flex-col gap-6 md:gap-8 pb-10">
+<!-- Page Heading Section -->
+<div class="flex flex-col md:flex-row md:items-start justify-between gap-4">
+<div class="flex flex-col gap-2">
+<h2 class="text-3xl md:text-4xl font-black tracking-tight text-slate-900 dark:text-white">Apollo CRM - Mobile Android</h2>
+<p class="text-slate-500 dark:text-[#9da6b9] text-base max-w-2xl">Manage application versions, track reported issues, and monitor deployment health.</p>
+</div>
+<div class="flex gap-3">
+<button class="flex items-center gap-2 px-4 py-2 rounded-lg bg-white dark:bg-[#282e39] border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-white text-sm font-semibold hover:bg-slate-50 dark:hover:bg-[#333b4d] transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[18px]">settings</span>
+<span>Settings</span>
+</button>
+<button class="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-white text-sm font-semibold hover:bg-blue-600 transition-colors shadow-sm shadow-blue-500/20">
+<span class="material-symbols-outlined text-[18px]">add_circle</span>
+<span>Log Issue</span>
+</button>
+</div>
+</div>
+<!-- Stats Cards -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<div class="flex flex-col justify-between gap-4 p-5 rounded-xl bg-white dark:bg-[#1e2330] border border-slate-200 dark:border-slate-800 shadow-sm relative overflow-hidden group">
+<div class="absolute right-0 top-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-8xl text-red-500">bug_report</span>
+</div>
+<div>
+<p class="text-slate-500 dark:text-[#9da6b9] text-sm font-medium">Open Bugs</p>
+<p class="text-slate-900 dark:text-white text-3xl font-bold mt-1">12</p>
+</div>
+<div class="flex items-center gap-2 text-xs font-medium text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-500/10 px-2 py-1 rounded w-fit">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+                                +2 this week
+                            </div>
+</div>
+<div class="flex flex-col justify-between gap-4 p-5 rounded-xl bg-white dark:bg-[#1e2330] border border-slate-200 dark:border-slate-800 shadow-sm relative overflow-hidden group">
+<div class="absolute right-0 top-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-8xl text-orange-500">warning</span>
+</div>
+<div>
+<p class="text-slate-500 dark:text-[#9da6b9] text-sm font-medium">Critical Issues</p>
+<p class="text-slate-900 dark:text-white text-3xl font-bold mt-1">2</p>
+</div>
+<div class="flex items-center gap-2 text-xs font-medium text-orange-600 dark:text-orange-400 bg-orange-50 dark:bg-orange-500/10 px-2 py-1 rounded w-fit">
+                                Needs Attention
+                            </div>
+</div>
+<div class="flex flex-col justify-between gap-4 p-5 rounded-xl bg-white dark:bg-[#1e2330] border border-slate-200 dark:border-slate-800 shadow-sm relative overflow-hidden group">
+<div class="absolute right-0 top-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-8xl text-green-500">rocket_launch</span>
+</div>
+<div>
+<p class="text-slate-500 dark:text-[#9da6b9] text-sm font-medium">Live Version</p>
+<p class="text-slate-900 dark:text-white text-3xl font-bold mt-1">v4.5.1</p>
+</div>
+<div class="flex items-center gap-2 text-xs font-medium text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-500/10 px-2 py-1 rounded w-fit">
+                                Deployed 2 days ago
+                            </div>
+</div>
+</div>
+<!-- Split View Content -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- Left: Bug Reports (Takes 2/3) -->
+<div class="lg:col-span-2 flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<h3 class="text-slate-900 dark:text-white text-lg font-bold">Reported Issues</h3>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-2.5 top-2.5 text-slate-400 text-[20px]">search</span>
+<input class="pl-9 pr-4 py-2 bg-white dark:bg-[#1e2330] border border-slate-200 dark:border-slate-700 rounded-lg text-sm text-slate-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 w-full sm:w-64 transition-shadow" placeholder="Search issues..." type="text"/>
+</div>
+</div>
+<div class="bg-white dark:bg-[#1e2330] rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left text-sm">
+<thead class="bg-slate-50 dark:bg-[#282e39] border-b border-slate-200 dark:border-slate-700">
+<tr>
+<th class="px-6 py-3 font-semibold text-slate-500 dark:text-[#9da6b9]">ID</th>
+<th class="px-6 py-3 font-semibold text-slate-500 dark:text-[#9da6b9]">Severity</th>
+<th class="px-6 py-3 font-semibold text-slate-500 dark:text-[#9da6b9]">Issue Summary</th>
+<th class="px-6 py-3 font-semibold text-slate-500 dark:text-[#9da6b9]">Reporter</th>
+<th class="px-6 py-3 font-semibold text-slate-500 dark:text-[#9da6b9]">Status</th>
+<th class="px-6 py-3 font-semibold text-slate-500 dark:text-[#9da6b9] text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+<!-- Row 1 -->
+<tr class="hover:bg-slate-50 dark:hover:bg-[#252b36] transition-colors group">
+<td class="px-6 py-4 font-mono text-slate-500 dark:text-[#9da6b9]">#BUG-1024</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-500/20 dark:text-red-300">
+<span class="size-1.5 rounded-full bg-red-600 dark:bg-red-400"></span>
+                                                        Critical
+                                                    </span>
+</td>
+<td class="px-6 py-4 font-medium text-slate-900 dark:text-white">App crashes on login screen</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="size-6 rounded-full bg-slate-200 dark:bg-slate-600 bg-cover" data-alt="Portrait of user J Doe" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuB9kBuknIcxJG7y_Sd9eBtftvSFSdCFdJgFFLGOS7jlBOWoOD8q6Pwihx8sz8lj9FQ9wmJJA64TkNN0gnBMKplc7FpD7KJCeQPycF5L2hFS6Eqmx8zHi0fJqjOzoAVIz5cJqyh9OZczfbEPfUj2tI9SIxLHMTmP3uWZy6vekJbPKAaXXb5YIfWxNhn97ss5XNiPe7p4agmgQMo31YOPEbinDuwUzrhr_jksAFIwkEs1FSK9ZVPoHmujIqkWKL6Pv-q7OHr-SAmolYE");'></div>
+<span class="text-slate-600 dark:text-[#9da6b9]">jdoe</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-500/20 dark:text-blue-300">Open</span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-slate-50 dark:hover:bg-[#252b36] transition-colors group">
+<td class="px-6 py-4 font-mono text-slate-500 dark:text-[#9da6b9]">#BUG-1023</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-500/20 dark:text-yellow-300">
+<span class="size-1.5 rounded-full bg-yellow-600 dark:bg-yellow-400"></span>
+                                                        Minor
+                                                    </span>
+</td>
+<td class="px-6 py-4 font-medium text-slate-900 dark:text-white">Typo in settings menu header</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="size-6 rounded-full bg-slate-200 dark:bg-slate-600 bg-cover" data-alt="Portrait of user S Smith" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAl0tslq2mmJpyeFHT0QKjpRZGcqTy_z4yzxR3_ENBkiPUjaQHh1NRtI3vyEbx3AZc4D-DSnLenLqvHBhGJ8P0cRy6c6ySOZ-Qr4nIS4_9WBRmS8jAt2QgwfqOzDRXpEEiQISig-oDpv8jp8jc6FO0evyJB-tobdvVT_C6f8ZniuAEq6hUH8RJsPfeKaKJSwyGrF29ahgdQSRqfzMJ6PYSff0420nGpWWdwR3dUToKoeS3WTQWFGNIOWdRcCodJ6iTaAzgLAhzlyOo");'></div>
+<span class="text-slate-600 dark:text-[#9da6b9]">ssmith</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800 dark:bg-green-500/20 dark:text-green-300">Resolved</span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-slate-50 dark:hover:bg-[#252b36] transition-colors group">
+<td class="px-6 py-4 font-mono text-slate-500 dark:text-[#9da6b9]">#BUG-1022</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800 dark:bg-orange-500/20 dark:text-orange-300">
+<span class="size-1.5 rounded-full bg-orange-600 dark:bg-orange-400"></span>
+                                                        High
+                                                    </span>
+</td>
+<td class="px-6 py-4 font-medium text-slate-900 dark:text-white">Notification badge not updating</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="size-6 rounded-full bg-slate-200 dark:bg-slate-600 bg-cover" data-alt="Portrait of user M Brown" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDkKWIHJNS7xsrS4R7U-gySvXhnPSvRAtOYe6wPuvR4su34c3cpo8Wq7nxhj7UUZGj3N81MpJObHE47M2E-z1hSEbEC9kQQtPy_ON6LU6n9XAZCEAXPqalYsGkoE3lmBbiU-KHLt9xwzmD0LAYlR3ssZt-zZta2wVFOSh-mmPBlZgcYxsQUoJxdzg3KQxiNzsi2bch5sB772PEW6-hDnn0ITRQ9IAM6MgGXCoijO6VlH9MewDgP5AqOakpf7WW5jX2XY2uPd4DglfE");'></div>
+<span class="text-slate-600 dark:text-[#9da6b9]">mbrown</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded text-xs font-medium bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-300">In Progress</span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="px-6 py-4 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between">
+<p class="text-sm text-slate-500 dark:text-[#9da6b9]">Showing 3 of 12 issues</p>
+<div class="flex gap-2">
+<button class="px-3 py-1 text-sm text-slate-500 hover:text-slate-900 dark:text-[#9da6b9] dark:hover:text-white disabled:opacity-50" disabled="">Previous</button>
+<button class="px-3 py-1 text-sm text-slate-500 hover:text-slate-900 dark:text-[#9da6b9] dark:hover:text-white">Next</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Right: Version Control (Takes 1/3) -->
+<div class="flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<h3 class="text-slate-900 dark:text-white text-lg font-bold">Version Control</h3>
+<button class="text-primary text-sm font-semibold hover:text-blue-400 transition-colors">View All</button>
+</div>
+<div class="bg-white dark:bg-[#1e2330] rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm p-4 flex flex-col gap-4">
+<div class="p-4 rounded-lg bg-primary/5 border border-primary/20 flex flex-col gap-3">
+<div class="flex items-start justify-between">
+<div class="flex flex-col">
+<span class="text-xs font-bold tracking-wider text-primary uppercase">Current Live</span>
+<span class="text-2xl font-bold text-slate-900 dark:text-white">v4.5.1</span>
+</div>
+<span class="material-symbols-outlined text-primary">verified</span>
+</div>
+<p class="text-sm text-slate-600 dark:text-[#9da6b9]">Hotfix for login crash on Android 12 devices.</p>
+<div class="flex items-center gap-2 mt-1">
+<div class="w-full bg-slate-200 dark:bg-slate-700 h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 98%"></div>
+</div>
+<span class="text-xs text-slate-500 dark:text-slate-400 whitespace-nowrap">98% Stable</span>
+</div>
+</div>
+<button class="w-full py-2.5 rounded-lg border border-dashed border-slate-300 dark:border-slate-600 text-slate-500 dark:text-slate-400 hover:border-primary hover:text-primary hover:bg-primary/5 transition-all flex items-center justify-center gap-2 font-medium text-sm">
+<span class="material-symbols-outlined">add</span>
+                                    Draft New Version
+                                </button>
+<div class="flex flex-col gap-4 mt-2">
+<h4 class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">History</h4>
+<div class="flex gap-3 relative group">
+<div class="flex flex-col items-center">
+<div class="size-2.5 rounded-full bg-slate-300 dark:bg-slate-600 group-hover:bg-primary transition-colors"></div>
+<div class="w-px h-full bg-slate-200 dark:bg-slate-700 mt-1"></div>
+</div>
+<div class="flex flex-col pb-4">
+<p class="text-sm font-semibold text-slate-900 dark:text-white">v4.5.0</p>
+<p class="text-xs text-slate-500 dark:text-[#9da6b9]">Jan 12, 2024 • Major Update</p>
+<p class="text-sm text-slate-600 dark:text-slate-400 mt-1 line-clamp-2">Introduced dark mode support and new dashboard widgets.</p>
+</div>
+</div>
+<div class="flex gap-3 relative group">
+<div class="flex flex-col items-center">
+<div class="size-2.5 rounded-full bg-slate-300 dark:bg-slate-600 group-hover:bg-primary transition-colors"></div>
+<div class="w-px h-full bg-slate-200 dark:bg-slate-700 mt-1"></div>
+</div>
+<div class="flex flex-col pb-4">
+<p class="text-sm font-semibold text-slate-900 dark:text-white">v4.4.9</p>
+<p class="text-xs text-slate-500 dark:text-[#9da6b9]">Dec 20, 2023 • Maintenance</p>
+<p class="text-sm text-slate-600 dark:text-slate-400 mt-1 line-clamp-2">Routine security patches and performance improvements.</p>
+</div>
+</div>
+<div class="flex gap-3 relative group">
+<div class="flex flex-col items-center">
+<div class="size-2.5 rounded-full bg-slate-300 dark:bg-slate-600 group-hover:bg-primary transition-colors"></div>
+<!-- Last item no line needed ideally, but keeping layout consistent -->
+</div>
+<div class="flex flex-col">
+<p class="text-sm font-semibold text-slate-900 dark:text-white">v4.4.8</p>
+<p class="text-xs text-slate-500 dark:text-[#9da6b9]">Nov 15, 2023 • Hotfix</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</div>
+</body></html>

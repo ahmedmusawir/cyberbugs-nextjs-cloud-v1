@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Admin System Settings - BugTracker</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#135bec",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101622",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar for better aesthetic in dark mode */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1c1f27; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #3b4354; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #4b5563; 
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-white overflow-hidden">
+<div class="flex h-screen w-full flex-col">
+<!-- TopNavBar -->
+<header class="flex flex-none items-center justify-between border-b border-gray-200 dark:border-[#282e39] bg-white dark:bg-[#111318] px-6 py-3">
+<div class="flex items-center gap-4">
+<div class="size-8 text-primary">
+<svg class="h-full w-full" fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M42.4379 44C42.4379 44 36.0744 33.9038 41.1692 24C46.8624 12.9336 42.2078 4 42.2078 4L7.01134 4C7.01134 4 11.6577 12.932 5.96912 23.9969C0.876273 33.9029 7.27094 44 7.27094 44L42.4379 44Z" fill="currentColor"></path>
+</svg>
+</div>
+<h2 class="text-lg font-bold leading-tight tracking-[-0.015em]">BugTracker Admin</h2>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex gap-2">
+<button class="group flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-[#282e39] transition-colors">
+<span class="material-symbols-outlined text-gray-500 dark:text-white" style="font-size: 20px;">notifications</span>
+</button>
+<button class="group flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-[#282e39] transition-colors">
+<span class="material-symbols-outlined text-gray-500 dark:text-white" style="font-size: 20px;">help</span>
+</button>
+<button class="group flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-[#282e39] transition-colors">
+<span class="material-symbols-outlined text-gray-500 dark:text-white" style="font-size: 20px;">logout</span>
+</button>
+</div>
+<div class="h-10 w-10 rounded-full bg-cover bg-center border border-gray-200 dark:border-[#3b4354]" data-alt="User profile avatar image" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCb7WLzg6sfTBKL7sJ_uvUFehLDMdX9UN_t9edyLV8gT_lH8aOJBNJ5a7QDStOVE3DzFvSnMbzioYS7MpVDSw3-RF0JWIHGrqczeuweVjeR0V9QpQMjSlu9bMqFTReYuOcVddllNkrjv_1w2OvYvXAdS6kM1sqJZzgplucBMGDBLbMs4mu6_OoSNrsT2jDBeiiA0zTWjQU2JveTJ8-WhcBWGw7bu8xpNrr_HDkMJwjxlJ_IyJMYiFbEOy9y7mjgvrVWQQT7ZqkPQ98");'></div>
+</div>
+</header>
+<div class="flex flex-1 overflow-hidden">
+<!-- SideNavBar -->
+<aside class="flex w-64 flex-col border-r border-gray-200 dark:border-[#282e39] bg-white dark:bg-[#111318] p-4 flex-none overflow-y-auto">
+<div class="mb-6 flex gap-3 items-center px-2">
+<div class="size-10 rounded-full bg-cover bg-center" data-alt="Admin user avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCG9boReqvBKsRTKf7IFBurJ3K2s1zOmTm-S4XvYTcwwxS-bcwoAPYFTX30a0Nonbfic41SOmQt-a9qZxeOsyL3gNUTkiJs65HuqhuXZ6dBOTjcvR6j-bnGRHODDDIRarJVXzn95Df0c2PApS_KXWbVX1gw6mfcd3Fvhc2rZG9xxo-CRzAPppIbjEOwr-kK_xz1pKQJAOsDZXzw8Du-CcmQ86WcO8b0JaXrLbU9Q2HCHm4oxLeLpX7QXEP6rVyY3ERF5xtacCxC1UA");'></div>
+<div class="flex flex-col">
+<h1 class="text-base font-medium leading-normal">System Admin</h1>
+<p class="text-sm text-gray-500 dark:text-[#9da6b9]">v2.4.0</p>
+</div>
+</div>
+<nav class="flex flex-col gap-1 space-y-1">
+<a class="flex items-center gap-3 rounded-lg bg-primary/10 px-3 py-2 text-primary dark:bg-[#282e39] dark:text-white" href="#">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">settings</span>
+<span class="text-sm font-medium">General Settings</span>
+</a>
+<a class="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-600 hover:bg-gray-100 dark:text-[#9da6b9] dark:hover:bg-[#1c1f27] transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">group</span>
+<span class="text-sm font-medium">Users &amp; Permissions</span>
+</a>
+<a class="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-600 hover:bg-gray-100 dark:text-[#9da6b9] dark:hover:bg-[#1c1f27] transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">security</span>
+<span class="text-sm font-medium">Security &amp; Access</span>
+</a>
+<a class="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-600 hover:bg-gray-100 dark:text-[#9da6b9] dark:hover:bg-[#1c1f27] transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">hub</span>
+<span class="text-sm font-medium">Integrations</span>
+</a>
+<a class="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-600 hover:bg-gray-100 dark:text-[#9da6b9] dark:hover:bg-[#1c1f27] transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+<span class="text-sm font-medium">Notifications</span>
+</a>
+<div class="my-2 border-t border-gray-200 dark:border-[#282e39]"></div>
+<a class="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-600 hover:bg-gray-100 dark:text-[#9da6b9] dark:hover:bg-[#1c1f27] transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">database</span>
+<span class="text-sm font-medium">Data &amp; Maintenance</span>
+</a>
+<a class="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-600 hover:bg-gray-100 dark:text-[#9da6b9] dark:hover:bg-[#1c1f27] transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">history</span>
+<span class="text-sm font-medium">Audit Logs</span>
+</a>
+</nav>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 overflow-y-auto bg-background-light dark:bg-background-dark p-6 md:p-10">
+<div class="mx-auto max-w-[960px] pb-20">
+<!-- Page Heading -->
+<div class="mb-8 flex flex-col gap-2 border-b border-gray-200 dark:border-[#282e39] pb-6">
+<h1 class="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">General Settings</h1>
+<p class="text-sm text-gray-500 dark:text-[#9da6b9]">Configure global application preferences, defaults, and branding for your instance.</p>
+</div>
+<!-- Application Details Section -->
+<section class="mb-8 rounded-xl bg-white p-6 shadow-sm dark:bg-[#1c1f27] border border-gray-200 dark:border-none">
+<div class="mb-6 flex items-center justify-between">
+<div>
+<h3 class="text-lg font-bold leading-tight">Application Profile</h3>
+<p class="text-sm text-gray-500 dark:text-[#9da6b9] mt-1">Basic information displayed to users and in emails.</p>
+</div>
+</div>
+<div class="grid gap-6 md:grid-cols-2">
+<label class="flex flex-col gap-2">
+<span class="text-sm font-medium leading-normal text-slate-700 dark:text-white">Application Name</span>
+<input class="form-input block w-full rounded-lg border-gray-300 bg-gray-50 p-2.5 text-sm text-slate-900 focus:border-primary focus:ring-primary dark:border-[#3b4354] dark:bg-[#111318] dark:text-white dark:placeholder-gray-400" placeholder="My Bug Tracker" type="text" value="Enterprise Bug Tracker"/>
+</label>
+<label class="flex flex-col gap-2">
+<span class="text-sm font-medium leading-normal text-slate-700 dark:text-white">Support Email</span>
+<input class="form-input block w-full rounded-lg border-gray-300 bg-gray-50 p-2.5 text-sm text-slate-900 focus:border-primary focus:ring-primary dark:border-[#3b4354] dark:bg-[#111318] dark:text-white dark:placeholder-gray-400" placeholder="support@company.com" type="email" value="admin@bugtracker.internal"/>
+</label>
+<label class="flex flex-col gap-2">
+<span class="text-sm font-medium leading-normal text-slate-700 dark:text-white">Default Language</span>
+<select class="form-select block w-full rounded-lg border-gray-300 bg-gray-50 p-2.5 text-sm text-slate-900 focus:border-primary focus:ring-primary dark:border-[#3b4354] dark:bg-[#111318] dark:text-white">
+<option>English (US)</option>
+<option>Spanish</option>
+<option>French</option>
+<option>German</option>
+</select>
+</label>
+<label class="flex flex-col gap-2">
+<span class="text-sm font-medium leading-normal text-slate-700 dark:text-white">Timezone</span>
+<select class="form-select block w-full rounded-lg border-gray-300 bg-gray-50 p-2.5 text-sm text-slate-900 focus:border-primary focus:ring-primary dark:border-[#3b4354] dark:bg-[#111318] dark:text-white">
+<option>(GMT-08:00) Pacific Time</option>
+<option>(GMT-05:00) Eastern Time</option>
+<option selected="">(GMT+00:00) UTC</option>
+</select>
+</label>
+</div>
+</section>
+<!-- Workflow & Policies Section -->
+<section class="mb-8 rounded-xl bg-white p-6 shadow-sm dark:bg-[#1c1f27] border border-gray-200 dark:border-none">
+<div class="mb-6 border-b border-gray-100 pb-4 dark:border-[#282e39]">
+<h3 class="text-lg font-bold leading-tight">Workflow &amp; Policies</h3>
+<p class="text-sm text-gray-500 dark:text-[#9da6b9] mt-1">Define how bugs are retained and managed over time.</p>
+</div>
+<div class="flex flex-col gap-6">
+<div class="flex items-center justify-between">
+<div class="flex flex-col gap-1">
+<span class="text-base font-medium text-slate-900 dark:text-white">Auto-close Stale Bugs</span>
+<span class="text-sm text-gray-500 dark:text-[#9da6b9]">Automatically close bugs that haven't been updated in 90 days.</span>
+</div>
+<label class="relative inline-flex cursor-pointer items-center">
+<input checked="" class="peer sr-only" type="checkbox" value=""/>
+<div class="peer h-6 w-11 rounded-full bg-gray-200 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-primary peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none dark:bg-gray-700 dark:border-gray-600"></div>
+</label>
+</div>
+<hr class="border-gray-100 dark:border-[#282e39]"/>
+<div class="flex items-center justify-between">
+<div class="flex flex-col gap-1">
+<span class="text-base font-medium text-slate-900 dark:text-white">Bug Retention Policy</span>
+<span class="text-sm text-gray-500 dark:text-[#9da6b9]">How long to keep closed bugs before permanent deletion.</span>
+</div>
+<select class="form-select block w-40 rounded-lg border-gray-300 bg-gray-50 py-2 pl-3 pr-10 text-sm text-slate-900 focus:border-primary focus:ring-primary dark:border-[#3b4354] dark:bg-[#111318] dark:text-white">
+<option>1 Year</option>
+<option>3 Years</option>
+<option selected="">Indefinitely</option>
+</select>
+</div>
+<hr class="border-gray-100 dark:border-[#282e39]"/>
+<div class="flex items-center justify-between">
+<div class="flex flex-col gap-1">
+<span class="text-base font-medium text-slate-900 dark:text-white">Allow Tester Attachments</span>
+<span class="text-sm text-gray-500 dark:text-[#9da6b9]">Testers can upload images and logs (max 10MB).</span>
+</div>
+<label class="relative inline-flex cursor-pointer items-center">
+<input checked="" class="peer sr-only" type="checkbox" value=""/>
+<div class="peer h-6 w-11 rounded-full bg-gray-200 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-primary peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none dark:bg-gray-700 dark:border-gray-600"></div>
+</label>
+</div>
+</div>
+</section>
+<!-- Email Integration Section -->
+<section class="mb-8 rounded-xl bg-white p-6 shadow-sm dark:bg-[#1c1f27] border border-gray-200 dark:border-none">
+<div class="flex items-center justify-between mb-6">
+<div>
+<h3 class="text-lg font-bold leading-tight">SMTP Integration</h3>
+<p class="text-sm text-gray-500 dark:text-[#9da6b9] mt-1">Configure email server settings for system notifications.</p>
+</div>
+<span class="inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20 dark:bg-green-900/30 dark:text-green-400">Status: Connected</span>
+</div>
+<div class="grid gap-6 md:grid-cols-2">
+<label class="flex flex-col gap-2 col-span-2 md:col-span-1">
+<span class="text-sm font-medium leading-normal text-slate-700 dark:text-white">SMTP Host</span>
+<div class="relative">
+<span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500 dark:text-gray-400">
+<span class="material-symbols-outlined text-[18px]">dns</span>
+</span>
+<input class="form-input block w-full rounded-lg border-gray-300 bg-gray-50 py-2.5 pl-10 pr-3 text-sm text-slate-900 focus:border-primary focus:ring-primary dark:border-[#3b4354] dark:bg-[#111318] dark:text-white" type="text" value="smtp.sendgrid.net"/>
+</div>
+</label>
+<label class="flex flex-col gap-2 col-span-2 md:col-span-1">
+<span class="text-sm font-medium leading-normal text-slate-700 dark:text-white">Port</span>
+<input class="form-input block w-full rounded-lg border-gray-300 bg-gray-50 p-2.5 text-sm text-slate-900 focus:border-primary focus:ring-primary dark:border-[#3b4354] dark:bg-[#111318] dark:text-white" type="number" value="587"/>
+</label>
+<label class="flex flex-col gap-2 col-span-2">
+<span class="text-sm font-medium leading-normal text-slate-700 dark:text-white">API Key / Password</span>
+<input class="form-input block w-full rounded-lg border-gray-300 bg-gray-50 p-2.5 text-sm text-slate-900 focus:border-primary focus:ring-primary dark:border-[#3b4354] dark:bg-[#111318] dark:text-white" type="password" value="************************"/>
+</label>
+</div>
+<div class="mt-6 flex justify-end">
+<button class="flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-[#3b4354] dark:bg-[#282e39] dark:text-white dark:hover:bg-[#3b4354] transition-colors">
+<span class="material-symbols-outlined text-[18px]">send</span>
+                                Test Connection
+                            </button>
+</div>
+</section>
+</div>
+</main>
+<!-- Sticky Action Footer -->
+<div class="fixed bottom-0 left-0 right-0 z-10 w-full border-t border-gray-200 bg-white dark:border-[#282e39] dark:bg-[#111318] p-4 md:pl-72">
+<div class="mx-auto flex max-w-[960px] items-center justify-between">
+<span class="text-sm text-gray-500 dark:text-[#9da6b9]">Unsaved changes in General Settings</span>
+<div class="flex gap-3">
+<button class="rounded-lg px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-[#282e39] transition-colors">Discard</button>
+<button class="flex items-center gap-2 rounded-lg bg-primary px-6 py-2 text-sm font-bold text-white shadow-lg shadow-blue-500/30 hover:bg-blue-600 transition-all">
+<span class="material-symbols-outlined text-[18px]">save</span>
+                            Save Changes
+                        </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body></html>

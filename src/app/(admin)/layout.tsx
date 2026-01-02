@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
-import Navbar from "@/components/global/Navbar";
-import AdminSidebar from "@/components/layout/AdminSidebar";
+import { AdminSidebar } from "@/components/cyberbugs/layout";
 import { protectPage } from "@/utils/supabase/actions";
+import NavbarHome from "@/components/global/NavbarHome";
 
 interface LayoutProps {
   children: ReactNode;
@@ -11,14 +11,19 @@ export default async function AdminLayout({ children }: LayoutProps) {
   await protectPage(["admin"]);
 
   return (
-    <div className="flex flex-col min-h-screen">
-      <Navbar />
-      <section className="flex flex-1">
-        <div className="hidden md:block h-auto flex-shrink-0 border-4 w-[25rem]">
+    <div className="flex flex-col min-h-screen bg-slate-950">
+      {/* Common Navbar */}
+      <NavbarHome />
+      <div className="flex flex-1">
+        {/* Sidebar */}
+        <aside className="hidden md:block w-64 flex-shrink-0">
           <AdminSidebar />
-        </div>
-        <div className="flex-grow">{children}</div>
-      </section>
+        </aside>
+        {/* Main Content */}
+        <main className="flex-1 overflow-auto">
+          {children}
+        </main>
+      </div>
     </div>
   );
 }

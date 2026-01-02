@@ -1,57 +1,51 @@
 import React from "react";
 import {
   Command,
-  CommandDialog,
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
   CommandList,
   CommandSeparator,
-  CommandShortcut,
 } from "@/components/ui/command";
 import {
   LayoutDashboard,
-  Newspaper,
-  Folders,
-  CreditCard,
+  Bug,
+  FolderKanban,
+  PlusCircle,
   Settings,
-  User,
 } from "lucide-react";
 import Link from "next/link";
 
 const Sidebar = () => {
   return (
     <Command className="bg-secondary">
-      <CommandInput placeholder="Type a command or search..." />
-      <CommandList className="px-8">
+      <CommandInput placeholder="Search..." />
+      <CommandList className="px-4">
         <CommandEmpty>No results found.</CommandEmpty>
-        <CommandGroup heading="Suggestions">
+        <CommandGroup heading="Navigation">
           <CommandItem>
             <LayoutDashboard className="mr-2 h-4 w-4" />
-            <Link href="/members-portal">Dashboard</Link>
+            <Link href="/members-portal">Overview</Link>
           </CommandItem>
           <CommandItem>
-            <Newspaper className="mr-2 h-4 w-4" />
-            <Link href="/booking">New Booking</Link>
+            <Bug className="mr-2 h-4 w-4" />
+            <Link href="/members-portal/issues">Issues</Link>
+          </CommandItem>
+          <CommandItem>
+            <FolderKanban className="mr-2 h-4 w-4" />
+            <Link href="/members-portal/projects">Projects</Link>
+          </CommandItem>
+          <CommandItem>
+            <PlusCircle className="mr-2 h-4 w-4" />
+            <Link href="/members-portal/report-bug">Report Bug</Link>
           </CommandItem>
         </CommandGroup>
         <CommandSeparator />
         <CommandGroup heading="Settings">
           <CommandItem>
-            <User className="mr-2 h-4 w-4" />
-            <span>Profile</span>
-            <CommandShortcut>&#x2318; P</CommandShortcut>
-          </CommandItem>
-          <CommandItem>
-            <CreditCard className="mr-2 h-4 w-4" />
-            <span>Billing</span>
-            <CommandShortcut>&#x2318; B</CommandShortcut>
-          </CommandItem>
-          <CommandItem>
             <Settings className="mr-2 h-4 w-4" />
-            <span>Settings</span>
-            <CommandShortcut>&#x2318; S</CommandShortcut>
+            <Link href="/members-portal/settings">Profile Settings</Link>
           </CommandItem>
         </CommandGroup>
       </CommandList>

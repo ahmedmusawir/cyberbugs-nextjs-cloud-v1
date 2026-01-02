@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>BugTracker Pro - Login</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#135bec",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101622",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-white transition-colors duration-200">
+<div class="relative flex min-h-screen w-full flex-col lg:flex-row overflow-hidden group/design-root">
+<!-- Left Column: Branding / Visual (Adapted from HeaderImage) -->
+<div class="lg:w-1/2 w-full relative flex flex-col justify-end overflow-hidden bg-[#111318] lg:h-auto h-64 shrink-0">
+<!-- Background Image with Gradient Overlay -->
+<div class="absolute inset-0 bg-cover bg-center z-0" data-alt="Close up of computer code on a dark monitor screen" style='background-image: linear-gradient(0deg, rgba(16, 22, 34, 0.9) 0%, rgba(16, 22, 34, 0.4) 50%, rgba(0, 0, 0, 0) 100%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuDRH4ENdMCsLuqJJY4aSv0FCphAc8XpqxKGawtytCydPhbSNP0nv3hWcO_vhsS6K-4QMX5kkUuuxvE7GkvZMiNYVIW3oj8RkR0mC_lt0RnA79IxocKoIL5rLcW_mc038BiPTj6qxVOyNZfiz-Af-pmnIeAGUMvXqC_KVZYETltVvfqSN0yl3Gn0PyTJJEHYDy4dwFsHyZlChenvOFYD4aCL4duy6S6zLjeBZrPmTOGsK__XdGNJfau_yi8RVNfLVMbDDzoqC_aNPuA");'>
+</div>
+<!-- Branding Content -->
+<div class="relative z-10 p-8 lg:p-16 flex flex-col gap-4">
+<div class="flex items-center gap-3">
+<div class="flex items-center justify-center w-12 h-12 rounded-lg bg-primary/20 backdrop-blur-sm border border-primary/30">
+<span class="material-symbols-outlined text-primary text-3xl">bug_report</span>
+</div>
+<h1 class="text-white tracking-tight text-3xl lg:text-4xl font-bold leading-tight">BugTracker Pro</h1>
+</div>
+<p class="text-slate-300 text-lg hidden lg:block max-w-md font-normal leading-relaxed">
+                    Streamline your quality assurance process. Track, manage, and resolve issues faster with our advanced reporting tools designed for modern teams.
+                 </p>
+<!-- Feature Badges (Visual interest) -->
+<div class="hidden lg:flex gap-3 mt-4">
+<span class="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-sm font-medium text-white backdrop-blur-md border border-white/10">
+<span class="material-symbols-outlined text-[18px]">security</span> Secure
+                    </span>
+<span class="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-sm font-medium text-white backdrop-blur-md border border-white/10">
+<span class="material-symbols-outlined text-[18px]">speed</span> Fast
+                    </span>
+<span class="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-sm font-medium text-white backdrop-blur-md border border-white/10">
+<span class="material-symbols-outlined text-[18px]">group</span> Team-ready
+                    </span>
+</div>
+</div>
+</div>
+<!-- Right Column: Login Form -->
+<div class="lg:w-1/2 w-full flex flex-col justify-center items-center p-6 lg:p-24 overflow-y-auto bg-background-light dark:bg-background-dark">
+<div class="w-full max-w-md flex flex-col gap-8">
+<!-- Headline Section -->
+<div class="text-center lg:text-left">
+<h2 class="text-slate-900 dark:text-white tracking-tight text-[32px] font-bold leading-tight">Welcome Back</h2>
+<p class="text-slate-500 dark:text-slate-400 text-base font-normal leading-normal pt-2">
+                        Sign in to access your dashboard.
+                    </p>
+</div>
+<!-- Form Section -->
+<form class="flex flex-col gap-5" onsubmit="event.preventDefault();">
+<!-- Email Field -->
+<label class="flex flex-col gap-2">
+<span class="text-slate-900 dark:text-white text-base font-medium leading-normal">Email Address</span>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-900 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-slate-300 dark:border-[#3b4354] bg-white dark:bg-[#1c1f27] focus:border-primary h-14 placeholder:text-slate-400 dark:placeholder:text-[#9da6b9] p-[15px] text-base font-normal leading-normal transition-all" placeholder="name@example.com" type="email" value=""/>
+</label>
+<!-- Password Field -->
+<label class="flex flex-col gap-2">
+<div class="flex justify-between items-center">
+<span class="text-slate-900 dark:text-white text-base font-medium leading-normal">Password</span>
+</div>
+<div class="relative flex w-full items-stretch rounded-lg">
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-900 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-slate-300 dark:border-[#3b4354] bg-white dark:bg-[#1c1f27] focus:border-primary h-14 placeholder:text-slate-400 dark:placeholder:text-[#9da6b9] p-[15px] pr-12 text-base font-normal leading-normal transition-all" placeholder="Enter your password" type="password" value=""/>
+<div class="absolute right-0 top-0 h-full flex items-center pr-4">
+<button class="text-slate-400 dark:text-[#9da6b9] hover:text-primary transition-colors focus:outline-none flex items-center justify-center p-1 rounded hover:bg-slate-100 dark:hover:bg-[#2a2e38]" type="button">
+<span class="material-symbols-outlined" style="font-size: 24px;">visibility</span>
+</button>
+</div>
+</div>
+</label>
+<!-- Remember Me & Forgot Password Row -->
+<div class="flex flex-wrap items-center justify-between gap-4 py-1">
+<label class="flex items-center gap-2 cursor-pointer group">
+<input class="form-checkbox h-5 w-5 rounded border-slate-300 dark:border-[#3b4354] bg-white dark:bg-[#1c1f27] text-primary focus:ring-primary/50 focus:ring-offset-0 transition-all cursor-pointer" type="checkbox"/>
+<span class="text-slate-600 dark:text-slate-300 text-sm font-medium group-hover:text-slate-800 dark:group-hover:text-white transition-colors">Remember me</span>
+</label>
+<a class="text-primary hover:text-blue-500 text-sm font-semibold transition-colors" href="#">Forgot Password?</a>
+</div>
+<!-- Submit Button -->
+<button class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-5 bg-primary text-white text-base font-bold leading-normal tracking-[0.015em] hover:bg-blue-600 focus:bg-blue-600 active:scale-[0.98] transition-all w-full mt-2 shadow-lg shadow-primary/20">
+<span class="truncate">Sign In</span>
+</button>
+</form>
+<!-- Footer / Sign Up Prompt -->
+<div class="text-center pt-2">
+<p class="text-slate-500 dark:text-slate-400 text-sm">
+                        Don't have an account? 
+                        <a class="text-primary hover:text-blue-500 font-semibold transition-colors" href="#">Contact Admin</a>
+</p>
+</div>
+<div class="mt-auto lg:pt-8 pt-4 text-center lg:text-left border-t border-slate-200 dark:border-[#3b4354] lg:border-none">
+<p class="text-slate-400 dark:text-slate-600 text-xs mt-6 lg:mt-0">© 2023 BugTracker Pro. All rights reserved.</p>
+</div>
+</div>
+</div>
+</div>
+</body></html>

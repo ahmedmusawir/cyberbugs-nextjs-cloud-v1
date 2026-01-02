@@ -1653,6 +1653,448 @@ src/
 
 ---
 
+## 12. SuperAdmin User Management
+
+SuperAdmin users have elevated privileges to create, view, and delete other users.
+
+### SuperAdmin Role Definition
+
+```typescript
+// User metadata flags
+interface UserRoleFlags {
+  is_qr_superadmin: 0 | 1;  // Full access + user management
+  is_qr_admin: 0 | 1;       // Admin portal access
+  is_qr_member: 0 | 1;      // Member/read-only access
+}
+```
+
+### SuperAdmin API: Create User
+
+```typescript
+// src/app/api/superadmin/add-user/route.ts
+
+import { NextRequest, NextResponse } from 'next/server';
+import { createClient } from '@/utils/supabase/server';
+
+export async function POST(req: NextRequest) {
+  try {
+    const supabase = await createClient();
+
+    // 1. Verify requester is SuperAdmin
+    const { data: { user: requester } } = await supabase.auth.getUser();
+    if (!requester) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const requesterMeta = requester.user_metadata;
+    if (requesterMeta?.is_qr_superadmin !== 1) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
+
+    // 2. Parse request body
+    const { email, password, is_qr_superadmin, is_qr_admin, is_qr_member } = await req.json();
+
+    // 3. Validate at least one role
+    if (!is_qr_superadmin && !is_qr_admin && !is_qr_member) {
+      return NextResponse.json(
+        { error: 'At least one role must be assigned' },
+        { status: 400 }
+      );
+    }
+
+    // 4. Create user in Supabase Auth
+    const { data: authData, error: authError } = await supabase.auth.admin.createUser({
+      email,
+      password,
+      email_confirm: true, // Auto-confirm email
+      user_metadata: {
+        is_qr_superadmin: is_qr_superadmin || 0,
+        is_qr_admin: is_qr_admin || 0,
+        is_qr_member: is_qr_member || 0,
+      },
+    });
+
+    if (authError) {
+      return NextResponse.json({ error: authError.message }, { status: 400 });
+    }
+
+    // 5. Optionally create in mirror table (see next section)
+    await supabase.from('app_users').insert({
+      id: authData.user.id,
+      email,
+      role: is_qr_superadmin ? 'SuperAdmin' : is_qr_admin ? 'Admin' : 'Member',
+    });
+
+    return NextResponse.json({ user: authData.user }, { status: 201 });
+  } catch (error) {
+    console.error('Error creating user:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+  }
+}
+```
+
+### SuperAdmin API: Delete User
+
+```typescript
+// src/app/api/superadmin/delete-user/route.ts
+
+import { NextRequest, NextResponse } from 'next/server';
+import { createClient } from '@/utils/supabase/server';
+
+export async function POST(req: NextRequest) {
+  try {
+    const supabase = await createClient();
+
+    // 1. Verify requester is SuperAdmin
+    const { data: { user: requester } } = await supabase.auth.getUser();
+    if (!requester || requester.user_metadata?.is_qr_superadmin !== 1) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
+
+    // 2. Get user ID to delete
+    const { userId } = await req.json();
+
+    // 3. Prevent deleting SuperAdmins (safety)
+    const { data: targetUser } = await supabase.auth.admin.getUserById(userId);
+    if (targetUser?.user?.user_metadata?.is_qr_superadmin === 1) {
+      return NextResponse.json(
+        { error: 'Cannot delete SuperAdmin users' },
+        { status: 400 }
+      );
+    }
+
+    // 4. Delete from mirror table first
+    await supabase.from('app_users').delete().eq('id', userId);
+
+    // 5. Delete from Supabase Auth
+    const { error } = await supabase.auth.admin.deleteUser(userId);
+    if (error) {
+      return NextResponse.json({ error: error.message }, { status: 400 });
+    }
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error('Error deleting user:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+  }
+}
+```
+
+### SuperAdmin API: Get All Users
+
+```typescript
+// src/app/api/superadmin/get-users/route.ts
+
+import { NextResponse } from 'next/server';
+import { createClient } from '@/utils/supabase/server';
+
+export async function GET() {
+  try {
+    const supabase = await createClient();
+
+    // 1. Verify requester is SuperAdmin
+    const { data: { user: requester } } = await supabase.auth.getUser();
+    if (!requester || requester.user_metadata?.is_qr_superadmin !== 1) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
+
+    // 2. List all users from Supabase Auth
+    const { data: { users }, error } = await supabase.auth.admin.listUsers();
+    if (error) {
+      return NextResponse.json({ error: error.message }, { status: 400 });
+    }
+
+    // 3. Transform for client consumption
+    const transformedUsers = users.map((user) => ({
+      id: user.id,
+      email: user.email,
+      is_qr_superadmin: user.user_metadata?.is_qr_superadmin || 0,
+      is_qr_admin: user.user_metadata?.is_qr_admin || 0,
+      is_qr_member: user.user_metadata?.is_qr_member || 0,
+      created_at: user.created_at,
+    }));
+
+    return NextResponse.json({ users: transformedUsers });
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+  }
+}
+```
+
+---
+
+## 13. User Mirror Table Pattern
+
+When you need custom user data beyond what Supabase Auth provides, create a mirror table.
+
+### Why Mirror Tables?
+
+| Benefit | Description |
+|---------|-------------|
+| **Custom fields** | Store app-specific data (avatar, preferences) |
+| **Query flexibility** | Join with other tables easily |
+| **RLS policies** | Apply fine-grained access control |
+| **Audit trail** | Track user changes separately from auth |
+
+### Mirror Table Schema
+
+```sql
+CREATE TABLE app_users (
+  -- Same ID as Supabase Auth user
+  id UUID PRIMARY KEY,
+  
+  -- Custom fields
+  display_name TEXT,
+  avatar_url TEXT,
+  role TEXT DEFAULT 'member',
+  preferences JSONB DEFAULT '{}',
+  
+  -- Timestamps
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Enable RLS
+ALTER TABLE app_users ENABLE ROW LEVEL SECURITY;
+
+-- Users can read their own profile
+CREATE POLICY "Users read own profile"
+ON app_users FOR SELECT
+USING (auth.uid() = id);
+
+-- Users can update their own profile
+CREATE POLICY "Users update own profile"
+ON app_users FOR UPDATE
+USING (auth.uid() = id);
+```
+
+### Synchronized User Creation
+
+```typescript
+// Create user in both Supabase Auth and mirror table
+const createUserWithProfile = async (
+  email: string,
+  password: string,
+  profileData: { displayName: string; role: string }
+) => {
+  const supabase = await createClient();
+
+  // 1. Create in Supabase Auth
+  const { data: authData, error: authError } = await supabase.auth.admin.createUser({
+    email,
+    password,
+    email_confirm: true,
+    user_metadata: {
+      display_name: profileData.displayName,
+      role: profileData.role,
+    },
+  });
+
+  if (authError) throw authError;
+
+  // 2. Create in mirror table with SAME ID
+  const { error: profileError } = await supabase.from('app_users').insert({
+    id: authData.user.id, // Critical: same UUID
+    display_name: profileData.displayName,
+    role: profileData.role,
+  });
+
+  if (profileError) {
+    // Rollback: delete auth user if profile creation fails
+    await supabase.auth.admin.deleteUser(authData.user.id);
+    throw profileError;
+  }
+
+  return authData.user;
+};
+```
+
+### Synchronized User Deletion
+
+```typescript
+// Delete user from both systems
+const deleteUserCompletely = async (userId: string) => {
+  const supabase = await createClient();
+
+  // 1. Delete from mirror table first (referential order)
+  const { error: profileError } = await supabase
+    .from('app_users')
+    .delete()
+    .eq('id', userId);
+
+  if (profileError) {
+    console.error('Failed to delete profile:', profileError);
+    // Continue with auth deletion
+  }
+
+  // 2. Delete from Supabase Auth
+  const { error: authError } = await supabase.auth.admin.deleteUser(userId);
+
+  if (authError) throw authError;
+};
+```
+
+### Fetch User with Profile
+
+```typescript
+// Get auth user and profile in one call
+const getUserWithProfile = async () => {
+  const supabase = await createClient();
+
+  // Get auth user
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return null;
+
+  // Get profile from mirror table
+  const { data: profile } = await supabase
+    .from('app_users')
+    .select('*')
+    .eq('id', user.id)
+    .single();
+
+  return {
+    ...user,
+    profile,
+  };
+};
+```
+
+---
+
+## 14. HOC Route Protection Pattern
+
+Use Higher-Order Components to protect route layouts by role.
+
+### withRoleCheck HOC
+
+```typescript
+// src/hoc/withRoleCheck.tsx
+'use client';
+
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuthStore } from '@/store/useAuthStore';
+import Spinner from '@/components/common/Spinner';
+
+interface RoleCheckConfig {
+  allowedRoles: string[]; // e.g., ['is_qr_admin', 'is_qr_member']
+  redirectTo: string;     // e.g., '/admin-login'
+}
+
+export function withRoleCheck<P extends object>(
+  WrappedComponent: React.ComponentType<P>,
+  config: RoleCheckConfig
+) {
+  return function WithRoleCheckComponent(props: P) {
+    const router = useRouter();
+    const { user, roles, isLoading } = useAuthStore();
+    const [isAuthorized, setIsAuthorized] = useState(false);
+
+    useEffect(() => {
+      if (isLoading) return;
+
+      // Not logged in
+      if (!user) {
+        router.push(config.redirectTo);
+        return;
+      }
+
+      // Check if user has any of the allowed roles
+      const hasRole = config.allowedRoles.some(
+        (role) => roles[role as keyof typeof roles] === 1
+      );
+
+      if (!hasRole) {
+        router.push(config.redirectTo);
+        return;
+      }
+
+      setIsAuthorized(true);
+    }, [user, roles, isLoading, router]);
+
+    if (isLoading || !isAuthorized) {
+      return (
+        <div className="flex items-center justify-center min-h-screen">
+          <Spinner />
+        </div>
+      );
+    }
+
+    return <WrappedComponent {...props} />;
+  };
+}
+```
+
+### Usage in Layouts
+
+```typescript
+// src/app/(admin)/layout.tsx
+import { withRoleCheck } from '@/hoc/withRoleCheck';
+
+function AdminLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="min-h-screen bg-slate-50">
+      <AdminNavbar />
+      <main className="p-4">{children}</main>
+    </div>
+  );
+}
+
+// Protect: Only admin and member roles can access
+export default withRoleCheck(AdminLayout, {
+  allowedRoles: ['is_qr_admin', 'is_qr_member'],
+  redirectTo: '/admin-login',
+});
+```
+
+```typescript
+// src/app/(superadmin)/layout.tsx
+import { withRoleCheck } from '@/hoc/withRoleCheck';
+
+function SuperAdminLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="min-h-screen bg-slate-900 text-white">
+      <SuperAdminNavbar />
+      <main className="p-4">{children}</main>
+    </div>
+  );
+}
+
+// Protect: Only superadmin role can access
+export default withRoleCheck(SuperAdminLayout, {
+  allowedRoles: ['is_qr_superadmin'],
+  redirectTo: '/superadmin-login',
+});
+```
+
+### Role-Based UI Elements
+
+```typescript
+// Show/hide UI based on role
+'use client';
+
+import { useAuthStore } from '@/store/useAuthStore';
+
+export function AdminActions() {
+  const { roles } = useAuthStore();
+
+  return (
+    <div className="flex gap-2">
+      {/* All admins can view */}
+      <Button>View Details</Button>
+
+      {/* Only SuperAdmins can delete */}
+      {roles.is_qr_superadmin === 1 && (
+        <Button variant="destructive">Delete User</Button>
+      )}
+    </div>
+  );
+}
+```
+
+---
+
 ## Summary
 
 This authentication system provides:
@@ -1661,6 +2103,7 @@ This authentication system provides:
 ✅ **Simple** - Three client types, clear patterns, minimal boilerplate  
 ✅ **Scalable** - Role-based access, metadata-driven, extensible  
 ✅ **Production-ready** - Middleware, error handling, type safety  
+✅ **SuperAdmin Ready** - User management APIs, mirror tables, HOC protection
 
 **Key Takeaways:**
 1. Always use server-side validation
@@ -1669,6 +2112,9 @@ This authentication system provides:
 4. Roles stored in user_metadata
 5. Middleware keeps sessions alive
 6. protectPage() for route protection
+7. Mirror tables for custom user data
+8. HOC pattern for layout-level protection
+9. SuperAdmin APIs for user management
 
 **Next Steps:**
 1. Implement RLS policies in Supabase
