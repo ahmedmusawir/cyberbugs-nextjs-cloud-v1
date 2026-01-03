@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   Search,
   Plus,
@@ -29,13 +30,17 @@ import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { toast } from "@/lib/toast-helpers";
 
 const AdminUsersPageContent = () => {
+  const router = useRouter();
   const [users, setUsers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [roleFilter, setRoleFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [userToDelete, setUserToDelete] = useState<any>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -52,6 +57,11 @@ const AdminUsersPageContent = () => {
 
     fetchUsers();
   }, []);
+
+  // Reset to page 1 whenever filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [roleFilter, statusFilter, searchQuery]);
 
   const getRoleBadge = (role: string) => {
     const styles: Record<string, string> = {
@@ -93,6 +103,38 @@ const AdminUsersPageContent = () => {
       toast.success("User removed", `${userToDelete.full_name} has been removed from the system.`);
       setUserToDelete(null);
     }
+  };
+
+  // Filter users
+  const filteredUsers = users.filter((user) => {
+    // Search filter
+    if (searchQuery) {
+      const searchLower = searchQuery.toLowerCase();
+      const matchesSearch =
+        user.full_name?.toLowerCase().includes(searchLower) ||
+        user.email?.toLowerCase().includes(searchLower) ||
+        user.id?.toLowerCase().includes(searchLower);
+      if (!matchesSearch) return false;
+    }
+
+    // Role filter
+    if (roleFilter !== "all" && user.role !== roleFilter) return false;
+
+    // Status filter
+    if (statusFilter === "active" && !user.is_active) return false;
+    if (statusFilter === "inactive" && user.is_active) return false;
+
+    return true;
+  });
+
+  // Pagination
+  const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedUsers = filteredUsers.slice(startIndex, endIndex);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
   };
 
   if (loading) {
@@ -143,6 +185,8 @@ const AdminUsersPageContent = () => {
               <Input
                 placeholder="Search by name, email, or ID..."
                 className="pl-9 bg-slate-800 border-slate-700 text-white placeholder:text-slate-500"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
             <div className="flex gap-4">
@@ -211,7 +255,7 @@ const AdminUsersPageContent = () => {
                 </tr>
               </thead>
               <tbody>
-                {users.map((user, index) => (
+                {paginatedUsers.map((user, index) => (
                   <tr
                     key={user.id}
                     className="border-b border-slate-800 hover:bg-slate-800/50"
@@ -294,6 +338,7 @@ const AdminUsersPageContent = () => {
                           variant="ghost"
                           size="icon"
                           className="h-8 w-8 text-slate-400 hover:text-white"
+                          onClick={() => router.push(`/admin-portal/users/${user.id}/edit`)}
                         >
                           <Pencil className="h-4 w-4" />
                         </Button>
@@ -308,6 +353,7 @@ const AdminUsersPageContent = () => {
                           variant="ghost"
                           size="icon"
                           className="h-8 w-8 text-slate-400 hover:text-red-400"
+                          onClick={() => handleDeleteClick(user)}
                         >
                           <Ban className="h-4 w-4" />
                         </Button>
@@ -322,34 +368,59 @@ const AdminUsersPageContent = () => {
           {/* Pagination */}
           <div className="flex items-center justify-between mt-4 pt-4 border-t border-slate-800">
             <span className="text-sm text-slate-500">
-              Showing <span className="text-white">1</span> to{" "}
-              <span className="text-white">{users.length}</span> of{" "}
-              <span className="text-white">24</span> results
+              Showing <span className="text-white">{startIndex + 1}</span> to{" "}
+              <span className="text-white">{Math.min(endIndex, filteredUsers.length)}</span> of{" "}
+              <span className="text-white">{filteredUsers.length}</span> results
             </span>
             <div className="flex items-center gap-1">
-              <Button variant="outline" size="icon" className="h-8 w-8" disabled>
-                <ChevronLeft className="h-4 w-4" />
-              </Button>
               <Button
                 variant="outline"
-                size="sm"
-                className="h-8 w-8 bg-blue-600 border-blue-600 text-white"
+                size="icon"
+                className="h-8 w-8"
+                disabled={currentPage === 1}
+                onClick={() => handlePageChange(currentPage - 1)}
               >
-                1
+                <ChevronLeft className="h-4 w-4" />
               </Button>
-              <Button variant="outline" size="sm" className="h-8 w-8">
-                2
-              </Button>
-              <Button variant="outline" size="sm" className="h-8 w-8">
-                3
-              </Button>
-              <Button variant="outline" size="icon" className="h-8 w-8">
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                <Button
+                  key={page}
+                  variant="outline"
+                  size="sm"
+                  className={`h-8 w-8 ${
+                    currentPage === page
+                      ? "bg-blue-600 border-blue-600 text-white"
+                      : ""
+                  }`}
+                  onClick={() => handlePageChange(page)}
+                >
+                  {page}
+                </Button>
+              ))}
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-8 w-8"
+                disabled={currentPage === totalPages}
+                onClick={() => handlePageChange(currentPage + 1)}
+              >
                 <ChevronRight className="h-4 w-4" />
               </Button>
             </div>
           </div>
         </CardContent>
       </Card>
+
+      {/* Delete Confirmation Dialog */}
+      <ConfirmDialog
+        open={deleteDialogOpen}
+        onOpenChange={setDeleteDialogOpen}
+        onConfirm={handleDeleteConfirm}
+        title="Remove User"
+        description={`Are you sure you want to remove ${userToDelete?.full_name || 'this user'}? This action cannot be undone.`}
+        confirmText="Remove User"
+        variant="destructive"
+      />
     </div>
   );
 };

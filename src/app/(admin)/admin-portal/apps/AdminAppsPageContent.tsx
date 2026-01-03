@@ -9,36 +9,26 @@ import {
   Monitor,
   Globe,
   ArrowRight,
+  Trash2,
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { appService } from "@/mocks/services";
+import { useApps } from "@/contexts/AppsContext";
 import Link from "next/link";
 import { LoadingState } from "@/components/ui/loading-state";
 import { EmptyState } from "@/components/ui/empty-state";
 import { ErrorState } from "@/components/ui/error-state";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
+import { toast } from "@/lib/toast-helpers";
 
 const AdminAppsPageContent = () => {
-  const [apps, setApps] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { apps, deleteApp } = useApps();
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [appToDelete, setAppToDelete] = useState<any>(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const appsData = await appService.getAllWithStats();
-        setApps(appsData);
-      } catch (error) {
-        console.error("Error fetching apps:", error);
-        setError("Failed to load applications");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   const getPlatformIcon = (platform: string) => {
     switch (platform?.toLowerCase()) {
@@ -66,35 +56,21 @@ const AdminAppsPageContent = () => {
     }
   };
 
-  const handleRetry = () => {
-    setError(null);
-    setLoading(true);
-    appService.getAllWithStats()
-      .then(appsData => {
-        setApps(appsData);
-        setLoading(false);
-      })
-      .catch(() => {
-        setError("Failed to load applications");
-        setLoading(false);
-      });
+
+  const handleDeleteClick = (e: React.MouseEvent, app: any) => {
+    e.preventDefault(); // Prevent Link navigation
+    e.stopPropagation();
+    setAppToDelete(app);
+    setDeleteDialogOpen(true);
   };
 
-  if (loading) {
-    return (
-      <div className="p-8">
-        <LoadingState message="Loading applications..." />
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="p-8">
-        <ErrorState message={error} onRetry={handleRetry} />
-      </div>
-    );
-  }
+  const handleDeleteConfirm = () => {
+    if (appToDelete) {
+      deleteApp(appToDelete.id);
+      toast.success("Application deleted", `"${appToDelete.name}" has been removed.`);
+      setAppToDelete(null);
+    }
+  };
 
   return (
     <div className="p-8">
@@ -121,10 +97,12 @@ const AdminAppsPageContent = () => {
               className="pl-9 bg-slate-800 border-slate-700 text-white placeholder:text-slate-500"
             />
           </div>
-          <Button className="gap-2 bg-blue-600 hover:bg-blue-700">
-            <Plus className="h-4 w-4" />
-            Add Application
-          </Button>
+          <Link href="/admin-portal/apps/new">
+            <Button className="gap-2 bg-blue-600 hover:bg-blue-700">
+              <Plus className="h-4 w-4" />
+              Add Application
+            </Button>
+          </Link>
         </div>
       </div>
 
@@ -139,7 +117,17 @@ const AdminAppsPageContent = () => {
                   <div className={`p-3 rounded-xl ${getPlatformColor(app.platform)}`}>
                     {getPlatformIcon(app.platform)}
                   </div>
-                  <ArrowRight className="h-5 w-5 text-slate-600 group-hover:text-slate-400 transition-colors" />
+                  <div className="flex items-center gap-2">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8 text-slate-600 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity"
+                      onClick={(e) => handleDeleteClick(e, app)}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                    <ArrowRight className="h-5 w-5 text-slate-600 group-hover:text-slate-400 transition-colors" />
+                  </div>
                 </div>
 
                 {/* App Info */}
@@ -164,16 +152,29 @@ const AdminAppsPageContent = () => {
         ))}
 
         {/* Add New App Card */}
-        <Card className="bg-slate-900/50 border-slate-800 border-dashed hover:border-slate-700 transition-all cursor-pointer group">
-          <CardContent className="p-6 flex flex-col items-center justify-center min-h-[200px]">
-            <div className="p-4 rounded-full bg-slate-800 group-hover:bg-slate-700 transition-colors mb-4">
-              <Plus className="h-8 w-8 text-slate-400" />
-            </div>
-            <p className="text-slate-400 font-medium">Add New Application</p>
-            <p className="text-sm text-slate-500 mt-1">Register a new app to track</p>
-          </CardContent>
-        </Card>
+        <Link href="/admin-portal/apps/new">
+          <Card className="bg-slate-900/50 border-slate-800 border-dashed hover:border-slate-700 transition-all cursor-pointer group">
+            <CardContent className="p-6 flex flex-col items-center justify-center min-h-[200px]">
+              <div className="p-4 rounded-full bg-slate-800 group-hover:bg-slate-700 transition-colors mb-4">
+                <Plus className="h-8 w-8 text-slate-400" />
+              </div>
+              <p className="text-slate-400 font-medium">Add New Application</p>
+              <p className="text-sm text-slate-500 mt-1">Register a new app to track</p>
+            </CardContent>
+          </Card>
+        </Link>
       </div>
+
+      {/* Delete Confirmation Dialog */}
+      <ConfirmDialog
+        open={deleteDialogOpen}
+        onOpenChange={setDeleteDialogOpen}
+        onConfirm={handleDeleteConfirm}
+        title="Delete Application"
+        description={`Are you sure you want to delete "${appToDelete?.name || 'this application'}"? All associated bugs and data will also be removed. This action cannot be undone.`}
+        confirmText="Delete Application"
+        variant="destructive"
+      />
     </div>
   );
 };

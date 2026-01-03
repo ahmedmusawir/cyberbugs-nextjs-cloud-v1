@@ -25,8 +25,9 @@ import {
 } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
 import { Upload, X, Plus, Trash2 } from "lucide-react";
-import { appService, bugService } from "@/mocks/services";
-import { useToast } from "@/hooks/use-toast";
+import { appService } from "@/mocks/services";
+import { useBugs } from "@/contexts/BugsContext";
+import { toast } from "@/lib/toast-helpers";
 
 const formSchema = z.object({
   app_id: z.string().min(1, { message: "Please select an application" }),
@@ -43,7 +44,7 @@ const formSchema = z.object({
 
 const MemberReportBugPageContent = () => {
   const router = useRouter();
-  const { toast } = useToast();
+  const { addBug } = useBugs();
   const [apps, setApps] = useState<any[]>([]);
   const [versions, setVersions] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
@@ -112,25 +113,26 @@ const MemberReportBugPageContent = () => {
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     setLoading(true);
     try {
-      await bugService.create({
+      // Create bug in-memory
+      const newBug = addBug({
         ...data,
         reported_by: "current-user-id",
         status: "open",
       });
 
-      toast({
-        title: "Bug Reported Successfully",
-        description: "Your bug report has been submitted to the development team.",
-      });
+      toast.success(
+        "Bug Reported Successfully",
+        "Your bug report has been submitted to the development team."
+      );
 
-      router.push("/members-portal/issues");
+      // Navigate to the new bug detail page
+      router.push(`/members-portal/issues/${newBug.id}`);
     } catch (error) {
       console.error("Error creating bug:", error);
-      toast({
-        title: "Error",
-        description: "Failed to submit bug report. Please try again.",
-        variant: "destructive",
-      });
+      toast.error(
+        "Error",
+        "Failed to submit bug report. Please try again."
+      );
     } finally {
       setLoading(false);
     }
